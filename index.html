@@ -3,14 +3,146 @@
 <head>
     <meta charset="utf-8">
     <title>NEU大学数学过程学习系统</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        .center-block {
+            float: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20%;
+            margin-bottom: 20%;
+        }
+        .wrapper {
+            display: table;
+            height: 100%;
+        }
+        .cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .nav-right {
+            height: 100%;
+            line-height: 100%;
+            padding: 0;
+            font-size: x-large;
+        }
+        .list-group-item {
+            border-top-right-radius: .25rem;
+            border-top-left-radius: .25rem;
+            border-bottom-left-radius: .25rem;
+            border-bottom-right-radius: .25rem;
+            font-size: 12px;
+        }
+        .modal-body {
+            padding: 0;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+            background-image: url("leaf.png");
+        }
+    </style>
 </head>
 <body>
+    <div class="container wrapper">
+        <div class="row cell">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg center-block" name="高等数学_GS">高等数学_GS</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg center-block" disabled name="概率统计_GL">概率统计_GL</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg center-block" disabled name="复变函数_FB">复变函数_FB</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg center-block" disabled name="线性代数_XD">线性代数_XD</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">知识点选择</h4>
+                </div>
+                <div id=0 class="modal-body">
 
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/tether.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jszip.min.js"></script>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="GetPaper()">开始作答</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/tether.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function GetPaper() {
+            idtxt='';
+            rawjson.forEach(function(x){
+               if (dicachild[x.Id]==undefined && $('#'+x.Id).children('label').children('input')[0].checked) idtxt+=x.Id+',';
+            });
+            idtxt=idtxt.slice(0,idtxt.length-1);
+            window.location.href='epaper.html?Id='+idtxt+'&DataSource='+window.ename;
+        }
+        function InsertNode(root) {
+            var x=root.attr('id');
+            if (dicachild[x]==undefined) return ;
+            root.append('<div class="collapse"><div class="list-group"></div></div>');
+            var inode=root.find('div.list-group');
+            for (var i=0;i<dicachild[x].length;i++) {
+                var htmltxt='<div id=\''+dicachild[x][i]+'\' class="list-group-item"><label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" onclick="if (this.checked) {n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=true; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=true;}}}}} else {for (i=dicparent[parseInt($(this).parent().parent().attr(\'id\'))];i!=0;i=dicparent[i]){$(\'#\'+i).children(\'label\').children(\'input\')[0].checked=false} n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=false; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=false;}}}}}" ><span class="custom-control-indicator"></span><span class="custom-control-description">'+dictcname[dicachild[x][i]].slice(0,18)+'</span></label>';
+                if (dicachild[dicachild[x][i]]!=undefined) htmltxt+='<button type="button" class="navbar-toggler float-xs-right nav-right" onclick="$(this).next(\'div.collapse\').collapse(\'toggle\');">&#9776;</button>';
+                htmltxt+='</div>';
+                inode.append(htmltxt);
+                InsertNode($('#'+dicachild[x][i]));
+            }
+        }
+        $("button.center-block").on("click touchstart",function(){
+            if ($(this).attr('disabled')) return ;
+            $('#myModal').modal('toggle');
+            window.ename=$(this).attr('name');
+            $.ajax({
+                type: "GET",
+                url: "proxy.php?exerciseHandler.ashx?dataSource=" + $(this).attr('name'),
+                async: false,
+                success: function(data,status){
+                    if (status!='success') {
+                        alert('Failed');
+                    }
+                    else {
+                        window.rawjson=$.parseJSON(data);
+                        window.dicachild={};
+                        window.dicparent={};
+                        window.dictcname={};
+                        rawjson.forEach(function(x) {
+                            dicparent[x.Id]=x.Pid;
+                            dictcname[x.Id]=x.Name;
+                            if (dicachild[x.Pid]==undefined) {
+                                dicachild[x.Pid]=[];
+                            }
+                            dicachild[x.Pid][dicachild[x.Pid].length]=x.Id;
+                        });
+                        var root=$("#0");
+                        root.empty();
+                        InsertNode(root);
+                        root.children('div.collapse').show();
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
