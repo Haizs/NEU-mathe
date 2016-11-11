@@ -8,10 +8,65 @@
     <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
-
+    <progress class="progress progress-striped progress-animated" value="8" max="100"></progress>
+    <div class="card">
+        <img class="card-img-top">
+        <div class="card-block">
+            <h4 class="card-title">第一题</h4>
+        </div>
+        <div class="card-block">
+        </div>
+        <div class="card-block">
+            <nav>
+                <ul class="pager">
+                    <li><a href="#">Previous</a></li>
+                    <li><a href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/tether.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jszip.min.js"></script>
+    <script type="text/javascript" src="js/jszip-utils.min.js"></script>
+    <script type="text/javascript">
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+        $(document).ready(function(){
+            $.ajax({
+                type: 'GET',
+                url: 'proxy.php?generateExerciseChoice.ashx?Id='+getUrlParam('Id')+'&DataSource='+getUrlParam('DataSource'),
+                async: false,
+                success: function(data,status){
+                    if (status!='success') {
+                        alert('Failed');
+                    }
+                    else {
+                        window.rawstring=data.split(',');
+                    }
+                }
+            });
+        });
+        function addFromZip(zipName,fileName,inObject) {
+            JSZipUtils.getBinaryContent(zipName, function (error, data) {
+                if(error) {
+                    throw error;
+                }
+                JSZip.loadAsync(data).then(function(zip) {
+                    var zipObj=zip.file(fileName);
+                    console.log(zipObj);
+                    zipObj.async("arraybuffer").then(function (ab){
+                        var imgBlob = new Blob([ab]);
+                        var htmlTxt='<img src="'+window.URL.createObjectURL(imgBlob)+'">';
+                        inObject.append(htmlTxt);
+                    });
+                });
+            });
+        }
+    </script>
 </body>
 </html>
