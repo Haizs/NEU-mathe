@@ -157,6 +157,7 @@
             $(this).text('Retry');
             $(":radio").attr('disabled','');
             clearTimeout(timer);
+            $('progress').toggleClass('progress-animated');
             checkAnswer();
         })
     </script>
