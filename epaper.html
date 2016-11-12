@@ -75,12 +75,13 @@
             hTxt=hTxt.replace(/radio-stacked0/g,'radio-stacked'+num);
             hTxt=hTxt.replace(/A0/g,'A'+num);
             $('#submit').before(hTxt);
+            insImg(num-1);
+            if (num<rawstring.length) setTimeout(function(){insHtml(num)},1000);
         }
         function insImg(num) {
             var preName=rawstring[num];
             var rs=preName.split('_');
             var zipPath='ChoiceSource/'+getUrlParam('DataSource')+'/'+rs[0]+'/'+rs[1]+'/'+preName+'.zip';
-            addFromZip(zipPath,preName+'_0','class="card-img-top img-responsive center-block"',$('#Q'+(parseInt(num)+1)),3);
             randomChoice[preName]=[1,2,3,4];
             for (var i=0;i<4;i++)
             {
@@ -89,11 +90,41 @@
                 randomChoice[preName][i]=randomChoice[preName][t];
                 randomChoice[preName][t]=tmp;
             }
-            addFromZip(zipPath,preName+'_'+randomChoice[preName][0],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C1'),1);
-            addFromZip(zipPath,preName+'_'+randomChoice[preName][1],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C2'),1);
-            addFromZip(zipPath,preName+'_'+randomChoice[preName][2],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C3'),1);
-            addFromZip(zipPath,preName+'_'+randomChoice[preName][3],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C4'),1);
-            addFromZip(zipPath,preName+'_5','class="card-img-top img-responsive center-block"',$('#A'+(parseInt(num)+1)),1);
+            insFromZip(zipPath,preName,num+1);
+        }
+        function insFromZip(zipName,preName,num) {
+            JSZipUtils.getBinaryContent(zipName, function (error, data) {
+                if(error) {
+                    throw error;
+                }
+                JSZip.loadAsync(data).then(function(zip) {
+                    var imgBlob;
+                    zip.file(preName+'_0').async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#Q'+num).after('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive center-block">');
+                    });
+                    zip.file(preName+'_'+randomChoice[preName][0]).async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#Q'+num+'C1').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName+'_'+randomChoice[preName][1]).async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#Q'+num+'C2').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName+'_'+randomChoice[preName][2]).async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#Q'+num+'C3').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName+'_'+randomChoice[preName][3]).async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#Q'+num+'C4').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName+'_5').async("arraybuffer").then(function (ab){
+                        imgBlob=new Blob([ab]);
+                        $('#A'+num).append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive center-block">');
+                    });
+                });
+            });
         }
         function checkAnswer() {
             $(':checked').parent().parent().css('background-color','red');
@@ -124,34 +155,12 @@
                     }
                 }
             });
-            var len=rawstring.length;
             window.randomChoice={};
-            for (var i=0;i<len;i++) {
-                insHtml(i);
-                insImg(i);
-            }
+            insHtml(0);
             window.countdown=80*60;
             $('progress').attr('max',countdown);
             countdownTime();
         });
-        function addFromZip(zipName,fileName,iAttr,iObject,method) {
-            JSZipUtils.getBinaryContent(zipName, function (error, data) {
-                if(error) {
-                    throw error;
-                }
-                JSZip.loadAsync(data).then(function(zip) {
-                    var zipObj=zip.file(fileName);
-                    zipObj.async("arraybuffer").then(function (ab){
-                        var imgBlob = new Blob([ab]);
-                        var htmlTxt='<img src="'+window.URL.createObjectURL(imgBlob)+'"'+iAttr+'>';
-                        if (method==0) iObject.prepend(htmlTxt);
-                        if (method==1) iObject.append(htmlTxt);
-                        if (method==2) iObject.before(htmlTxt);
-                        if (method==3) iObject.after(htmlTxt);
-                    });
-                });
-            });
-        }
         $('#submit').on('click touchstart',function() {
             $('.collapse').collapse('toggle');
             $('body,html').animate({scrollTop:0},1000);
