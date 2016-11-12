@@ -6,35 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        .center-block {
+            float: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .card-title {
+            margin: .5rem;
+        }
+        .custom-control {
+            display: inline;
+        }
+        .img-responsive {
+            max-width: 95%;
+            max-height: 100%;
+        }
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .list-group-item {
+            margin-left: -1px;
+            margin-right: -1px;
+        }
+        body {
+            height: 100%;
+            background-image: url("leaf.png");
+        }
+    </style>
 </head>
 <body>
-    <progress class="progress progress-striped progress-animated" value="8" max="100"></progress>
-    <div class="card">
-        <img class="card-img-top">
-        <div class="card-block">
-            <h4 class="card-title">第一题</h4>
-        </div>
-        <div class="card-block">
-        </div>
-        <div class="card-block">
-            <nav>
-                <ul class="pager">
-                    <li><a href="#">Previous</a></li>
-                    <li><a href="#">Next</a></li>
-                </ul>
-            </nav>
-        </div>
+    <progress class="progress progress-striped progress-animated" value="100" max="100"></progress>
+    <div class="container-fluid">
+        <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
     </div>
+
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/tether.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jszip.min.js"></script>
     <script type="text/javascript" src="js/jszip-utils.min.js"></script>
     <script type="text/javascript">
+        String.prototype.trim = function (Useless) {
+            var regex = eval("/^" + Useless + "*|" + Useless + "*$/g");
+            return this.replace(regex, "");
+        };
         function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return decodeURI(r[2]); return null;
+        }
+        function insHtml(num)
+        {
+            num=num+1;
+            window.hTxt='<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C1"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C2"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C3"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+            hTxt=hTxt.replace(/Q0/g,'Q'+num);
+            hTxt=hTxt.replace(/Question 0/g,'Question '+num);
+            hTxt=hTxt.replace(/radio-stacked0/g,'radio-stacked'+num);
+            hTxt=hTxt.replace(/A0/g,'A'+num);
+            $('#submit').before(hTxt);
+        }
+        function insImg(num)
+        {
+            var rs=rawstring[num].split('_');
+            var zipPath='ChoiceSource/'+getUrlParam('DataSource')+'/'+rs[0]+'/'+rs[1]+'/'+rawstring[num]+'.zip';
+            addFromZip(zipPath,rawstring[num]+'_0','class="card-img-top img-responsive center-block"',$('#Q'+(parseInt(num)+1)),3);
+            addFromZip(zipPath,rawstring[num]+'_1','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C1'),1);
+            addFromZip(zipPath,rawstring[num]+'_2','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C2'),1);
+            addFromZip(zipPath,rawstring[num]+'_3','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C3'),1);
+            addFromZip(zipPath,rawstring[num]+'_4','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C4'),1);
+            addFromZip(zipPath,rawstring[num]+'_5','class="card-img-top img-responsive center-block"',$('#A'+(parseInt(num)+1)),1);
         }
         $(document).ready(function(){
             $.ajax({
@@ -46,27 +89,38 @@
                         alert('Failed');
                     }
                     else {
-                        window.rawstring=data.split(',');
+                        window.rawstring=data.trim(',').split(',');
                     }
                 }
             });
+            var len=rawstring.length;
+            for (var i=0;i<len;i++) {
+                insHtml(i);
+                insImg(i);
+            }
         });
-        function addFromZip(zipName,fileName,inObject) {
+        function addFromZip(zipName,fileName,iAttr,iObject,method) {
             JSZipUtils.getBinaryContent(zipName, function (error, data) {
                 if(error) {
                     throw error;
                 }
                 JSZip.loadAsync(data).then(function(zip) {
                     var zipObj=zip.file(fileName);
-                    console.log(zipObj);
                     zipObj.async("arraybuffer").then(function (ab){
                         var imgBlob = new Blob([ab]);
-                        var htmlTxt='<img src="'+window.URL.createObjectURL(imgBlob)+'">';
-                        inObject.append(htmlTxt);
+                        var htmlTxt='<img src="'+window.URL.createObjectURL(imgBlob)+'"'+iAttr+'>';
+                        if (method==0) iObject.prepend(htmlTxt);
+                        if (method==1) iObject.append(htmlTxt);
+                        if (method==2) iObject.before(htmlTxt);
+                        if (method==3) iObject.after(htmlTxt);
                     });
                 });
             });
         }
+        $('#submit').on('click touchstart',function(){
+            $('.collapse').collapse('toggle');
+            $('body,html').animate({scrollTop:0},1000);
+        })
     </script>
 </body>
 </html>
