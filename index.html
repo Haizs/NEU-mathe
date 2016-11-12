@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>NEU大学数学过程学习系统</title>
+    <title>数学学习系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="favicon.ico">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="shortcut icon" href="favicon.ico">
     <style>
@@ -45,22 +47,23 @@
         body {
             height: 100%;
             background-image: url("leaf.png");
+            background-attachment:fixed;
         }
     </style>
 </head>
 <body>
     <div class="container wrapper">
         <div class="row cell">
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <button type="button" class="btn btn-primary btn-lg center-block" name="高等数学_GS">高等数学_GS</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <button type="button" class="btn btn-primary btn-lg center-block" disabled name="概率统计_GL">概率统计_GL</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <button type="button" class="btn btn-primary btn-lg center-block" disabled name="复变函数_FB">复变函数_FB</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <button type="button" class="btn btn-primary btn-lg center-block" disabled name="线性代数_XD">线性代数_XD</button>
             </div>
         </div>
@@ -80,7 +83,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="GetPaper()">开始作答</button>
+                    <button type="button" class="btn btn-primary" onclick="getPaper()">开始作答</button>
                 </div>
             </div>
         </div>
@@ -89,7 +92,7 @@
     <script type="text/javascript" src="js/tether.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        function GetPaper() {
+        function getPaper() {
             idtxt='';
             rawjson.forEach(function(x){
                if (dicachild[x.Id]==undefined && $('#'+x.Id).children('label').children('input')[0].checked) idtxt+=x.Id+',';
@@ -97,17 +100,17 @@
             idtxt=idtxt.slice(0,idtxt.length-1);
             window.location.href='epaper.html?Id='+idtxt+'&DataSource='+window.ename;
         }
-        function InsertNode(root) {
+        function insertNode(root) {
             var x=root.attr('id');
             if (dicachild[x]==undefined) return ;
             root.append('<div class="collapse"><div class="list-group"></div></div>');
-            var inode=root.find('div.list-group');
+            var iNode=root.find('div.list-group');
             for (var i=0;i<dicachild[x].length;i++) {
-                var htmltxt='<div id=\''+dicachild[x][i]+'\' class="list-group-item"><label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" onclick="if (this.checked) {n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=true; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=true;}}}}} else {for (i=dicparent[parseInt($(this).parent().parent().attr(\'id\'))];i!=0;i=dicparent[i]){$(\'#\'+i).children(\'label\').children(\'input\')[0].checked=false} n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=false; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=false;}}}}}" ><span class="custom-control-indicator"></span><span class="custom-control-description">'+dictcname[dicachild[x][i]].slice(0,18)+'</span></label>';
-                if (dicachild[dicachild[x][i]]!=undefined) htmltxt+='<button type="button" class="navbar-toggler float-xs-right nav-right" onclick="$(this).next(\'div.collapse\').collapse(\'toggle\');">&#9776;</button>';
-                htmltxt+='</div>';
-                inode.append(htmltxt);
-                InsertNode($('#'+dicachild[x][i]));
+                var htmlTxt='<div id=\''+dicachild[x][i]+'\' class="list-group-item"><label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" onclick="if (this.checked) {n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=true; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=true;}}}}} else {for (i=dicparent[parseInt($(this).parent().parent().attr(\'id\'))];i!=0;i=dicparent[i]){$(\'#\'+i).children(\'label\').children(\'input\')[0].checked=false} n=parseInt($(this).parent().parent().attr(\'id\')); if (dicachild[n]!=undefined) {for (i=0;i<dicachild[n].length;i++){ $(\'#\'+dicachild[n][i]).children(\'label\').children(\'input\')[0].checked=false; m=dicachild[n][i]; if (dicachild[m]!=undefined) {for (j=0;j<dicachild[m].length;j++){$(\'#\'+dicachild[m][j]).children(\'label\').children(\'input\')[0].checked=false;}}}}}" ><span class="custom-control-indicator"></span><span class="custom-control-description">'+dictcname[dicachild[x][i]].slice(0,18)+'</span></label>';
+                if (dicachild[dicachild[x][i]]!=undefined) htmlTxt+='<button type="button" class="navbar-toggler float-xs-right nav-right" onclick="$(this).next(\'div.collapse\').collapse(\'toggle\');">&#9776;</button>';
+                htmlTxt+='</div>';
+                iNode.append(htmlTxt);
+                insertNode($('#'+dicachild[x][i]));
             }
         }
         $("button.center-block").on("click touchstart",function(){
@@ -137,7 +140,7 @@
                         });
                         var root=$("#0");
                         root.empty();
-                        InsertNode(root);
+                        insertNode(root);
                         root.children('div.collapse').show();
                     }
                 }
