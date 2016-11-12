@@ -24,8 +24,12 @@
             max-height: 100%;
         }
         .container-fluid {
+            padding-top: 25px;
             padding-left: 10px;
             padding-right: 10px;
+        }
+        .progress {
+            margin: 0;
         }
         .list-group-item {
             margin-left: -1px;
@@ -38,11 +42,13 @@
     </style>
 </head>
 <body>
-    <progress class="progress progress-striped progress-animated" value="100" max="100"></progress>
+    <progress class="progress progress-striped progress-animated progress-danger navbar-fixed-top" value="" max=""></progress>
     <div class="container-fluid">
         <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
     </div>
-
+    <footer class="blockquote-footer text-xs-center">
+        <p>海之树 2016.11<br><i>https://GitHub.com/Haizs/NEU-mathe</i></p>
+    </footer>
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/tether.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -58,28 +64,50 @@
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return decodeURI(r[2]); return null;
         }
-        function insHtml(num)
-        {
+        function insHtml(num) {
             num=num+1;
-            window.hTxt='<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C1"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C2"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C3"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0-C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+            window.hTxt='<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
             hTxt=hTxt.replace(/Q0/g,'Q'+num);
             hTxt=hTxt.replace(/Question 0/g,'Question '+num);
             hTxt=hTxt.replace(/radio-stacked0/g,'radio-stacked'+num);
             hTxt=hTxt.replace(/A0/g,'A'+num);
             $('#submit').before(hTxt);
         }
-        function insImg(num)
-        {
-            var rs=rawstring[num].split('_');
-            var zipPath='ChoiceSource/'+getUrlParam('DataSource')+'/'+rs[0]+'/'+rs[1]+'/'+rawstring[num]+'.zip';
-            addFromZip(zipPath,rawstring[num]+'_0','class="card-img-top img-responsive center-block"',$('#Q'+(parseInt(num)+1)),3);
-            addFromZip(zipPath,rawstring[num]+'_1','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C1'),1);
-            addFromZip(zipPath,rawstring[num]+'_2','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C2'),1);
-            addFromZip(zipPath,rawstring[num]+'_3','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C3'),1);
-            addFromZip(zipPath,rawstring[num]+'_4','class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'-C4'),1);
-            addFromZip(zipPath,rawstring[num]+'_5','class="card-img-top img-responsive center-block"',$('#A'+(parseInt(num)+1)),1);
+        function insImg(num) {
+            var preName=rawstring[num];
+            var rs=preName.split('_');
+            var zipPath='ChoiceSource/'+getUrlParam('DataSource')+'/'+rs[0]+'/'+rs[1]+'/'+preName+'.zip';
+            addFromZip(zipPath,preName+'_0','class="card-img-top img-responsive center-block"',$('#Q'+(parseInt(num)+1)),3);
+            randomChoice[preName]=[1,2,3,4];
+            for (var i=0;i<4;i++)
+            {
+                var t=parseInt(Math.random()*10)%4;
+                var tmp=randomChoice[preName][i];
+                randomChoice[preName][i]=randomChoice[preName][t];
+                randomChoice[preName][t]=tmp;
+            }
+            addFromZip(zipPath,preName+'_'+randomChoice[preName][0],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C1'),1);
+            addFromZip(zipPath,preName+'_'+randomChoice[preName][1],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C2'),1);
+            addFromZip(zipPath,preName+'_'+randomChoice[preName][2],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C3'),1);
+            addFromZip(zipPath,preName+'_'+randomChoice[preName][3],'class="card-img-top img-responsive"',$('#Q'+(parseInt(num)+1)+'C4'),1);
+            addFromZip(zipPath,preName+'_5','class="card-img-top img-responsive center-block"',$('#A'+(parseInt(num)+1)),1);
         }
-        $(document).ready(function(){
+        function checkAnswer() {
+            $(':checked').parent().parent().css('background-color','red');
+            var len=rawstring.length;
+            for (var i=0;i<len;i++) {
+                $('#Q'+(parseInt(i)+1)+'C'+(parseInt(randomChoice[rawstring[i]].indexOf(1))+1)).parent().parent().css('background-color','greenyellow');
+            }
+        }
+        function countdownTime() {
+            countdown-=1;
+            $('progress').attr('value',countdown);
+            if(countdown==0){
+                $('#submit').click();
+            }
+            window.timer=setTimeout("countdownTime()",1000);
+        }
+        $(document).ready(function() {
             $.ajax({
                 type: 'GET',
                 url: 'proxy.php?generateExerciseChoice.ashx?Id='+getUrlParam('Id')+'&DataSource='+getUrlParam('DataSource'),
@@ -94,10 +122,14 @@
                 }
             });
             var len=rawstring.length;
+            window.randomChoice={};
             for (var i=0;i<len;i++) {
                 insHtml(i);
                 insImg(i);
             }
+            window.countdown=80*60;
+            $('progress').attr('max',countdown);
+            countdownTime();
         });
         function addFromZip(zipName,fileName,iAttr,iObject,method) {
             JSZipUtils.getBinaryContent(zipName, function (error, data) {
@@ -117,9 +149,15 @@
                 });
             });
         }
-        $('#submit').on('click touchstart',function(){
+        $('#submit').on('click touchstart',function() {
             $('.collapse').collapse('toggle');
             $('body,html').animate({scrollTop:0},1000);
+            if ($(this).text()=='Retry') window.location.replace(window.location.href);
+            $(this).toggleClass('btn-primary btn-danger');
+            $(this).text('Retry');
+            $(":radio").attr('disabled','');
+            clearTimeout(timer);
+            checkAnswer();
         })
     </script>
 </body>
