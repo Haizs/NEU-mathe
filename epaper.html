@@ -40,8 +40,8 @@
         }
 
         .list-group-item {
-            margin-left: -1px;
-            margin-right: -1px;
+            /*margin-left: -1px;
+            margin-right: -1px;*/
         }
 
         body {
@@ -49,6 +49,13 @@
             background-image: url("leaf.png");
             background-attachment: fixed;
         }
+
+        .list-group::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
     </style>
 </head>
 <body>
@@ -78,7 +85,7 @@
     }
     function insHtml(num) {
         num = num + 1;
-        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
         hTxt = hTxt.replace(/Q0/g, 'Q' + num);
         hTxt = hTxt.replace(/Question 0/g, 'Question ' + num);
         hTxt = hTxt.replace(/radio-stacked0/g, 'radio-stacked' + num);
