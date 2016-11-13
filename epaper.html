@@ -122,26 +122,39 @@
                 });
                 zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C1').append('<img id="Q' + num + 'C1_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C2').append('<img id="Q' + num + 'C2_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C3').append('<img id="Q' + num + 'C3_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C4').append('<img id="Q' + num + 'C4_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
                 });
                 zip.file(preName + '_5').async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
                     $('#A' + num).append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive center-block">');
                 });
+
+
             });
         });
+    }
+    function onImgLoad(num, f) {
+        //alert($('#Q' + num + 'C1_img').css("height"));
+        if (f == 1)
+            $('#Q' + num + 'C1_img').css("height") > $('#Q' + num + 'C2_img').css("height") ?
+                    $('#Q' + num + 'C2_img').css("height", $('#Q' + num + 'C1_img').css("height")) :
+                    $('#Q' + num + 'C1_img').css("height", $('#Q' + num + 'C2_img').css("height"));
+        else
+            $('#Q' + num + 'C3_img').css("height") > $('#Q' + num + 'C4_img').css("height") ?
+                    $('#Q' + num + 'C4_img').css("height", $('#Q' + num + 'C3_img').css("height")) :
+                    $('#Q' + num + 'C3_img').css("height", $('#Q' + num + 'C4_img').css("height"));
     }
     function checkAnswer() {
         $(':checked').parent().parent().css('background-color', 'red');
