@@ -85,7 +85,7 @@
     }
     function insHtml(num) {
         num = num + 1;
-        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
         hTxt = hTxt.replace(/Q0/g, 'Q' + num);
         hTxt = hTxt.replace(/Question 0/g, 'Question ' + num);
         hTxt = hTxt.replace(/radio-stacked0/g, 'radio-stacked' + num);
@@ -122,19 +122,19 @@
                 });
                 zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C1').append('<img id="Q' + num + 'C1_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C2').append('<img id="Q' + num + 'C2_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
+                    $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C3').append('<img id="Q' + num + 'C3_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                    $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
                 });
                 zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C4').append('<img id="Q' + num + 'C4_img" src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
+                    $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
                 });
                 zip.file(preName + '_5').async("arraybuffer").then(function (ab) {
                     imgBlob = new Blob([ab]);
@@ -148,13 +148,13 @@
     function onImgLoad(num, f) {
         //alert($('#Q' + num + 'C1_img').css("height"));
         if (f == 1)
-            $('#Q' + num + 'C1_img').css("height") > $('#Q' + num + 'C2_img').css("height") ?
-                    $('#Q' + num + 'C2_img').css("height", $('#Q' + num + 'C1_img').css("height")) :
-                    $('#Q' + num + 'C1_img').css("height", $('#Q' + num + 'C2_img').css("height"));
+            $('#Q' + num + 'C1_div').css("height") > $('#Q' + num + 'C2_div').css("height") ?
+                    $('#Q' + num + 'C2_div').css("height", $('#Q' + num + 'C1_div').css("height")) :
+                    $('#Q' + num + 'C1_div').css("height", $('#Q' + num + 'C2_div').css("height"));
         else
-            $('#Q' + num + 'C3_img').css("height") > $('#Q' + num + 'C4_img').css("height") ?
-                    $('#Q' + num + 'C4_img').css("height", $('#Q' + num + 'C3_img').css("height")) :
-                    $('#Q' + num + 'C3_img').css("height", $('#Q' + num + 'C4_img').css("height"));
+            $('#Q' + num + 'C3_div').css("height") > $('#Q' + num + 'C4_div').css("height") ?
+                    $('#Q' + num + 'C4_div').css("height", $('#Q' + num + 'C3_div').css("height")) :
+                    $('#Q' + num + 'C3_div').css("height", $('#Q' + num + 'C4_div').css("height"));
     }
     function checkAnswer() {
         $(':checked').parent().parent().css('background-color', 'red');
