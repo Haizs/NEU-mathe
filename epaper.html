@@ -15,163 +15,193 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .card-title {
             margin: .5rem;
         }
+
         .custom-control {
             display: inline;
         }
+
         .img-responsive {
             max-width: 95%;
             max-height: 100%;
         }
+
         .container-fluid {
             padding-top: 25px;
             padding-left: 10px;
             padding-right: 10px;
         }
+
         .progress {
             margin: 0;
         }
+
         .list-group-item {
-            margin-left: -1px;
-            margin-right: -1px;
+            /*margin-left: -1px;
+            margin-right: -1px;*/
         }
+
         body {
             height: 100%;
             background-image: url("leaf.png");
-            background-attachment:fixed;
+            background-attachment: fixed;
         }
+
+        .list-group::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
     </style>
 </head>
 <body>
-    <progress class="progress progress-striped progress-animated progress-danger navbar-fixed-top" value="" max=""></progress>
-    <div class="container-fluid">
-        <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
-    </div>
-    <footer class="blockquote-footer text-xs-center">
-        <p>海之树 2016.11<br><i>https://GitHub.com/Haizs/NEU-mathe</i></p>
-    </footer>
-    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="js/tether.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/jszip.min.js"></script>
-    <script type="text/javascript" src="js/jszip-utils.min.js"></script>
-    <script type="text/javascript">
-        String.prototype.trim = function (Useless) {
-            var regex = eval("/^" + Useless + "*|" + Useless + "*$/g");
-            return this.replace(regex, "");
-        };
-        function getUrlParam(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return decodeURI(r[2]); return null;
+<progress class="progress progress-striped progress-animated progress-danger navbar-fixed-top" value=""
+          max=""></progress>
+<div class="container-fluid">
+    <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
+</div>
+<footer class="blockquote-footer text-xs-center">
+    <p>海之树 2016.11<br><i>https://GitHub.com/Haizs/NEU-mathe</i></p>
+</footer>
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/tether.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jszip.min.js"></script>
+<script type="text/javascript" src="js/jszip-utils.min.js"></script>
+<script type="text/javascript">
+    String.prototype.trim = function (Useless) {
+        var regex = eval("/^" + Useless + "*|" + Useless + "*$/g");
+        return this.replace(regex, "");
+    };
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+    function insHtml(num) {
+        num = num + 1;
+        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+        hTxt = hTxt.replace(/Q0/g, 'Q' + num);
+        hTxt = hTxt.replace(/Question 0/g, 'Question ' + num);
+        hTxt = hTxt.replace(/radio-stacked0/g, 'radio-stacked' + num);
+        hTxt = hTxt.replace(/A0/g, 'A' + num);
+        $('#submit').before(hTxt);
+        insImg(num - 1);
+        if (num < rawstring.length) setTimeout(function () {
+            insHtml(num)
+        }, 1000);
+    }
+    function insImg(num) {
+        var preName = rawstring[num];
+        var rs = preName.split('_');
+        var zipPath = 'ChoiceSource/' + getUrlParam('DataSource') + '/' + rs[0] + '/' + rs[1] + '/' + preName + '.zip';
+        randomChoice[preName] = [1, 2, 3, 4];
+        for (var i = 0; i < 4; i++) {
+            var t = parseInt(Math.random() * 10) % 4;
+            var tmp = randomChoice[preName][i];
+            randomChoice[preName][i] = randomChoice[preName][t];
+            randomChoice[preName][t] = tmp;
         }
-        function insHtml(num) {
-            num=num+1;
-            window.hTxt='<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div class="list-group-item"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
-            hTxt=hTxt.replace(/Q0/g,'Q'+num);
-            hTxt=hTxt.replace(/Question 0/g,'Question '+num);
-            hTxt=hTxt.replace(/radio-stacked0/g,'radio-stacked'+num);
-            hTxt=hTxt.replace(/A0/g,'A'+num);
-            $('#submit').before(hTxt);
-            insImg(num-1);
-            if (num<rawstring.length) setTimeout(function(){insHtml(num)},1000);
-        }
-        function insImg(num) {
-            var preName=rawstring[num];
-            var rs=preName.split('_');
-            var zipPath='ChoiceSource/'+getUrlParam('DataSource')+'/'+rs[0]+'/'+rs[1]+'/'+preName+'.zip';
-            randomChoice[preName]=[1,2,3,4];
-            for (var i=0;i<4;i++)
-            {
-                var t=parseInt(Math.random()*10)%4;
-                var tmp=randomChoice[preName][i];
-                randomChoice[preName][i]=randomChoice[preName][t];
-                randomChoice[preName][t]=tmp;
+        insFromZip(zipPath, preName, num + 1);
+    }
+    function insFromZip(zipName, preName, num) {
+        JSZipUtils.getBinaryContent(zipName, function (error, data) {
+            if (error) {
+                throw error;
             }
-            insFromZip(zipPath,preName,num+1);
-        }
-        function insFromZip(zipName,preName,num) {
-            JSZipUtils.getBinaryContent(zipName, function (error, data) {
-                if(error) {
-                    throw error;
-                }
-                JSZip.loadAsync(data).then(function(zip) {
-                    var imgBlob;
-                    zip.file(preName+'_0').async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#Q'+num).after('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive center-block">');
-                    });
-                    zip.file(preName+'_'+randomChoice[preName][0]).async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#Q'+num+'C1').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName+'_'+randomChoice[preName][1]).async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#Q'+num+'C2').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName+'_'+randomChoice[preName][2]).async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#Q'+num+'C3').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName+'_'+randomChoice[preName][3]).async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#Q'+num+'C4').append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName+'_5').async("arraybuffer").then(function (ab){
-                        imgBlob=new Blob([ab]);
-                        $('#A'+num).append('<img src="'+window.URL.createObjectURL(imgBlob)+'" class="card-img-top img-responsive center-block">');
-                    });
+            JSZip.loadAsync(data).then(function (zip) {
+                var imgBlob;
+                zip.file(preName + '_0').async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#Q' + num).after('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive center-block">');
                 });
+                zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                });
+                zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
+                });
+                zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
+                });
+                zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
+                });
+                zip.file(preName + '_5').async("arraybuffer").then(function (ab) {
+                    imgBlob = new Blob([ab]);
+                    $('#A' + num).append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive center-block">');
+                });
+
+
             });
-        }
-        function checkAnswer() {
-            $(':checked').parent().parent().css('background-color','red');
-            var len=rawstring.length;
-            for (var i=0;i<len;i++) {
-                $('#Q'+(parseInt(i)+1)+'C'+(parseInt(randomChoice[rawstring[i]].indexOf(1))+1)).parent().parent().css('background-color','greenyellow');
-            }
-        }
-        function countdownTime() {
-            countdown-=1;
-            $('progress').attr('value',countdown);
-            if(countdown==0){
-                $('#submit').click();
-            }
-            window.timer=setTimeout("countdownTime()",1000);
-        }
-        $(document).ready(function() {
-            $.ajax({
-                type: 'GET',
-                url: 'proxy.php?generateExerciseChoice.ashx?Id='+getUrlParam('Id')+'&DataSource='+getUrlParam('DataSource'),
-                async: false,
-                success: function(data,status){
-                    if (status!='success') {
-                        alert('Failed');
-                    }
-                    else {
-                        window.rawstring=data.trim(',').split(',');
-                    }
-                }
-            });
-            window.randomChoice={};
-            insHtml(0);
-            window.countdown=80*60;
-            $('progress').attr('max',countdown);
-            countdownTime();
         });
-        $('#submit').on('click touchstart',function() {
-            $('.collapse').collapse('toggle');
-            $('body,html').animate({scrollTop:0},1000);
-            if ($(this).text()=='Retry') window.location.replace(window.location.href);
-            $(this).toggleClass('btn-primary btn-danger');
-            $(this).text('Retry');
-            $(":radio").attr('disabled','');
-            clearTimeout(timer);
-            $('progress').toggleClass('progress-animated');
-            checkAnswer();
-        })
-    </script>
+    }
+    function onImgLoad(num, f) {
+        //alert($('#Q' + num + 'C1_img').css("height"));
+        if (f == 1)
+            $('#Q' + num + 'C1_div').css("height") > $('#Q' + num + 'C2_div').css("height") ?
+                    $('#Q' + num + 'C2_div').css("height", $('#Q' + num + 'C1_div').css("height")) :
+                    $('#Q' + num + 'C1_div').css("height", $('#Q' + num + 'C2_div').css("height"));
+        else
+            $('#Q' + num + 'C3_div').css("height") > $('#Q' + num + 'C4_div').css("height") ?
+                    $('#Q' + num + 'C4_div').css("height", $('#Q' + num + 'C3_div').css("height")) :
+                    $('#Q' + num + 'C3_div').css("height", $('#Q' + num + 'C4_div').css("height"));
+    }
+    function checkAnswer() {
+        $(':checked').parent().parent().css('background-color', 'red');
+        var len = rawstring.length;
+        for (var i = 0; i < len; i++) {
+            $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1)).parent().parent().css('background-color', 'greenyellow');
+        }
+    }
+    function countdownTime() {
+        countdown -= 1;
+        $('progress').attr('value', countdown);
+        if (countdown == 0) {
+            $('#submit').click();
+        }
+        window.timer = setTimeout("countdownTime()", 1000);
+    }
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'proxy.php?generateExerciseChoice.ashx?Id=' + getUrlParam('Id') + '&DataSource=' + getUrlParam('DataSource'),
+            async: false,
+            success: function (data, status) {
+                if (status != 'success') {
+                    alert('Failed');
+                }
+                else {
+                    window.rawstring = data.trim(',').split(',');
+                }
+            }
+        });
+        window.randomChoice = {};
+        insHtml(0);
+        window.countdown = 80 * 60;
+        $('progress').attr('max', countdown);
+        countdownTime();
+    });
+    $('#submit').on('click touchstart', function () {
+        $('.collapse').collapse('toggle');
+        $('body,html').animate({scrollTop: 0}, 1000);
+        if ($(this).text() == 'Retry') window.location.replace(window.location.href);
+        $(this).toggleClass('btn-primary btn-danger');
+        $(this).text('Retry');
+        $(":radio").attr('disabled', '');
+        clearTimeout(timer);
+        $('progress').toggleClass('progress-animated');
+        checkAnswer();
+    })
+</script>
 </body>
 </html>
