@@ -137,6 +137,8 @@
                     window.dicachild = {};
                     window.dicparent = {};
                     window.dictcname = {};
+                    var root = $("#0");
+                    root.empty();
                     rawjson.forEach(function (x) {
                         dicparent[x.Id] = x.Pid;
                         dictcname[x.Id] = x.Name;
@@ -145,8 +147,6 @@
                         }
                         dicachild[x.Pid][dicachild[x.Pid].length] = x.Id;
                     });
-                    var root = $("#0");
-                    root.empty();
                     insertNode(root);
                     root.children('div.collapse').show();
                 }

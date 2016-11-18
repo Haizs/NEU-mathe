@@ -85,68 +85,62 @@
     }
     function insHtml(num) {
         num = num + 1;
-        window.hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+        hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
         hTxt = hTxt.replace(/Q0/g, 'Q' + num);
         hTxt = hTxt.replace(/Question 0/g, 'Question ' + num);
         hTxt = hTxt.replace(/radio-stacked0/g, 'radio-stacked' + num);
         hTxt = hTxt.replace(/A0/g, 'A' + num);
         $('#submit').before(hTxt);
-        insImg(num - 1);
-        if (num < rawstring.length) setTimeout(function () {
-            insHtml(num)
-        }, 1000);
-    }
-    function insImg(num) {
-        var preName = rawstring[num];
-        var rs = preName.split('_');
-        var zipPath = 'ChoiceSource/' + getUrlParam('DataSource') + '/' + rs[0] + '/' + rs[1] + '/' + preName + '.zip';
-        randomChoice[preName] = [1, 2, 3, 4];
-        for (var i = 0; i < 4; i++) {
-            var t = parseInt(Math.random() * 10) % 4;
-            var tmp = randomChoice[preName][i];
-            randomChoice[preName][i] = randomChoice[preName][t];
-            randomChoice[preName][t] = tmp;
-        }
-        insFromZip(zipPath, preName, num + 1);
-    }
-    function insFromZip(zipName, preName, num) {
-        JSZipUtils.getBinaryContent(zipName, function (error, data) {
-            if (error) {
-                throw error;
+        var promised = new Promise(function (resolve) {
+            var preName = rawstring[num - 1];
+            var rs = preName.split('_');
+            var zipPath = 'ChoiceSource/' + getUrlParam('DataSource') + '/' + rs[0] + '/' + rs[1] + '/' + preName + '.zip';
+            randomChoice[preName] = [1, 2, 3, 4];
+            for (var i = 0; i < 4; i++) {
+                var t = parseInt(Math.random() * 10) % 4;
+                var tmp = randomChoice[preName][i];
+                randomChoice[preName][i] = randomChoice[preName][t];
+                randomChoice[preName][t] = tmp;
             }
-            JSZip.loadAsync(data).then(function (zip) {
-                var imgBlob;
-                zip.file(preName + '_0').async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#Q' + num).after('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive center-block">');
+            JSZipUtils.getBinaryContent(zipPath, function (error, data) {
+                if (error) {
+                    throw error;
+                }
+                JSZip.loadAsync(data).then(function (zip) {
+                    var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
+                    zip.file(preName + '_0').async("arraybuffer").then(function (ab0) {
+                        imgBlob0 = new Blob([ab0]);
+                        $('#Q' + num).after('<img src="' + window.URL.createObjectURL(imgBlob0) + '" class="card-img-top img-responsive center-block">');
+                    });
+                    zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab1) {
+                        imgBlob1 = new Blob([ab1]);
+                        $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob1) + '" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab2) {
+                        imgBlob2 = new Blob([ab2]);
+                        $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob2) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
+                    });
+                    zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab3) {
+                        imgBlob3 = new Blob([ab3]);
+                        $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob3) + '" class="card-img-top img-responsive">');
+                    });
+                    zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab4) {
+                        imgBlob4 = new Blob([ab4]);
+                        $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob4) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
+                    });
+                    zip.file(preName + '_5').async("arraybuffer").then(function (ab5) {
+                        imgBlob5 = new Blob([ab5]);
+                        $('#A' + num).append('<img src="' + window.URL.createObjectURL(imgBlob5) + '" class="card-img-top img-responsive center-block">');
+                    });
+                    resolve(num);
                 });
-                zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
-                });
-                zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
-                });
-                zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive">');
-                });
-                zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
-                });
-                zip.file(preName + '_5').async("arraybuffer").then(function (ab) {
-                    imgBlob = new Blob([ab]);
-                    $('#A' + num).append('<img src="' + window.URL.createObjectURL(imgBlob) + '" class="card-img-top img-responsive center-block">');
-                });
-
-
             });
+        });
+        promised.then(function () {
+            if (num < rawstring.length) insHtml(num);
         });
     }
     function onImgLoad(num, f) {
-        //alert($('#Q' + num + 'C1_img').css("height"));
         if (f == 1)
             $('#Q' + num + 'C1_div').css("height") > $('#Q' + num + 'C2_div').css("height") ?
                     $('#Q' + num + 'C2_div').css("height", $('#Q' + num + 'C1_div').css("height")) :
@@ -162,6 +156,7 @@
         for (var i = 0; i < len; i++) {
             $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1)).parent().parent().css('background-color', 'greenyellow');
         }
+        answerChecked=true;
     }
     function countdownTime() {
         countdown -= 1;
@@ -169,7 +164,9 @@
         if (countdown == 0) {
             $('#submit').click();
         }
-        window.timer = setTimeout("countdownTime()", 1000);
+        if (countdown > 0 && answerChecked==false) setTimeout(function () {
+            countdownTime();
+        }, 1000);
     }
     $(document).ready(function () {
         $.ajax({
@@ -185,20 +182,20 @@
                 }
             }
         });
+        window.answerChecked=false;
         window.randomChoice = {};
         insHtml(0);
-        window.countdown = 80 * 60;
+        window.countdown = 90 * 60;
         $('progress').attr('max', countdown);
         countdownTime();
     });
-    $('#submit').on('click touchstart', function () {
+    $('#submit').on('click', function () {
+        if (answerChecked==true) window.location.replace(window.location.href);
         $('.collapse').collapse('toggle');
         $('body,html').animate({scrollTop: 0}, 1000);
-        if ($(this).text() == 'Retry') window.location.replace(window.location.href);
         $(this).toggleClass('btn-primary btn-danger');
         $(this).text('Retry');
         $(":radio").attr('disabled', '');
-        clearTimeout(timer);
         $('progress').toggleClass('progress-animated');
         checkAnswer();
     })
