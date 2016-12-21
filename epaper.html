@@ -15,57 +15,120 @@
             margin-left: auto;
             margin-right: auto;
         }
-
         .card-title {
             margin: .5rem;
         }
-
         .custom-control {
-            display: inline;
+            display: inline-block;
+            width: auto;
+            height: auto;
         }
-
         .img-responsive {
-            max-width: 95%;
-            max-height: 100%;
+            max-width: 100%;
+            height: auto;
         }
-
         .container-fluid {
             padding-top: 25px;
             padding-left: 10px;
             padding-right: 10px;
         }
-
         .progress {
             margin: 0;
         }
-
-        .list-group-item {
-            /*margin-left: -1px;
-            margin-right: -1px;*/
-        }
-
         body {
             height: 100%;
             background-image: url("leaf.png");
             background-attachment: fixed;
         }
+        /* 圆圈加载*/
+        #circle {
+            background-color: rgba(0,0,0,0);
+            border:5px solid rgba(0,183,229,0.9);/*颜色在这里修改*/
+            opacity:.9;
+            border-right:5px solid rgba(0,0,0,0);
+            border-left:5px solid rgba(0,0,0,0);
+            border-radius:50px;
+            box-shadow: 0 0 35px #2187e7;
+            width:50px;
+            height:50px;
+            margin:0 auto;
+            position:fixed;
+            left:30px;
+            bottom:30px;
+            -moz-animation:spinPulse 1s infinite ease-in-out;
+            -webkit-animation:spinPulse 1s infinite ease-in-out;
+            -o-animation:spinPulse 1s infinite ease-in-out;
+            -ms-animation:spinPulse 1s infinite ease-in-out;
 
-        .list-group::after {
-            content: "";
-            display: table;
-            clear: both;
         }
-
+        #circle1 {
+            background-color: rgba(0,0,0,0);
+            border:5px solid rgba(0,183,229,0.9);/*颜色在这里修改*/
+            opacity:.9;
+            border-left:5px solid rgba(0,0,0,0);
+            border-right:5px solid rgba(0,0,0,0);
+            border-radius:50px;
+            box-shadow: 0 0 15px #2187e7;
+            width:30px;
+            height:30px;
+            margin:0 auto;
+            position:fixed;
+            left:40px;
+            bottom:40px;
+            -moz-animation:spinoffPulse 1s infinite linear;
+            -webkit-animation:spinoffPulse 1s infinite linear;
+            -o-animation:spinoffPulse 1s infinite linear;
+            -ms-animation:spinoffPulse 1s infinite linear;
+        }
+        @-moz-keyframes spinPulse {
+            0% { -moz-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050;}
+            50% { -moz-transform:rotate(145deg); opacity:1; }
+            100% { -moz-transform:rotate(-320deg); opacity:0; }
+        }
+        @-moz-keyframes spinoffPulse {
+            0% { -moz-transform:rotate(0deg); }
+            100% { -moz-transform:rotate(360deg);  }
+        }
+        @-webkit-keyframes spinPulse {
+            0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
+            50% { -webkit-transform:rotate(145deg); opacity:1;}
+            100% { -webkit-transform:rotate(-320deg); opacity:0; }
+        }
+        @-webkit-keyframes spinoffPulse {
+            0% { -webkit-transform:rotate(0deg); }
+            100% { -webkit-transform:rotate(360deg); }
+        }
+        @-o-keyframes spinPulse {
+            0% { -o-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
+            50% { -o-transform:rotate(145deg); opacity:1;}
+            100% { -o-transform:rotate(-320deg); opacity:0; }
+        }
+        @-o-keyframes spinoffPulse {
+            0% { -o-transform:rotate(0deg); }
+            100% { -o-transform:rotate(360deg); }
+        }
+        @-ms-keyframes spinPulse {
+            0% { -ms-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
+            50% { -ms-transform:rotate(145deg); opacity:1;}
+            100% { -ms-transform:rotate(-320deg); opacity:0; }
+        }
+        @-ms-keyframes spinoffPulse {
+            0% { -ms-transform:rotate(0deg); }
+            100% { -ms-transform:rotate(360deg); }
+        }
+        /*=======*/
     </style>
 </head>
 <body>
+<div style="z-index:999" id="circle"></div>
+<div style="z-index:999" id="circle1"></div>
 <progress class="progress progress-striped progress-animated progress-danger navbar-fixed-top" value=""
           max=""></progress>
 <div class="container-fluid">
     <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
 </div>
 <footer class="blockquote-footer text-xs-center">
-    <p>海之树 2016.11<br><i>https://GitHub.com/Haizs/NEU-mathe</i></p>
+    <p>海之树 2016.12<br><i>https://GitHub.com/Haizs/NEU-mathe</i></p>
 </footer>
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/tether.min.js"></script>
@@ -85,12 +148,11 @@
     }
     function insHtml(num) {
         num = num + 1;
-        hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5><ul class="list-group"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C1"></span></label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C2"></span></label></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C3"></span></label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span><span class="custom-control-description" id="Q0C4"></span></label></div></ul><div class="collapse" id="A0"></div></div>';
+        var hTxt = '<div class="card"><h5 class="card-title text-xs-center" id="Q0">Question 0</h5>IMAGE0<ul class="list-group clearfix"><div id="Q' + num + 'C1_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span>IMAGE1</label></div><div id="Q' + num + 'C2_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span>IMAGE2</label></div><div class="clearfix visible-md-block"></div><div id="Q' + num + 'C3_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span>IMAGE3</label></div><div id="Q' + num + 'C4_div" class="list-group-item col-md-6"><label class="custom-control custom-radio"><input class="custom-control-input" name="radio-stacked0" type="radio"><span class="custom-control-indicator"></span>IMAGE4</span></label></div></ul><div class="collapse" id="A0">IMAGE5</div></div>';
         hTxt = hTxt.replace(/Q0/g, 'Q' + num);
         hTxt = hTxt.replace(/Question 0/g, 'Question ' + num);
         hTxt = hTxt.replace(/radio-stacked0/g, 'radio-stacked' + num);
         hTxt = hTxt.replace(/A0/g, 'A' + num);
-        $('#submit').before(hTxt);
         var promised = new Promise(function (resolve) {
             var preName = rawstring[num - 1];
             var rs = preName.split('_');
@@ -107,49 +169,45 @@
                     throw error;
                 }
                 JSZip.loadAsync(data).then(function (zip) {
-                    zip.file(preName + '_0').async("base64").then(function (data0) {
-                        $('#Q' + num).after('<img src="data:image/jpeg;base64,' + data0 + '" class="card-img-top img-responsive center-block">');
-                        zip.file(preName + '_' + randomChoice[preName][0]).async("base64").then(function (data1) {
-                            $('#Q' + num + 'C1').append('<img src="data:image/jpeg;base64,' + data1 + '" class="card-img-top img-responsive">');
-                            zip.file(preName + '_' + randomChoice[preName][1]).async("base64").then(function (data2) {
-                                $('#Q' + num + 'C2').append('<img src="data:image/jpeg;base64,' + data2 + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
-                                zip.file(preName + '_' + randomChoice[preName][2]).async("base64").then(function (data3) {
-                                    $('#Q' + num + 'C3').append('<img src="data:image/jpeg;base64,' + data3 + '" class="card-img-top img-responsive">');
-                                    zip.file(preName + '_' + randomChoice[preName][3]).async("base64").then(function (data4) {
-                                        $('#Q' + num + 'C4').append('<img src="data:image/jpeg;base64,' + data4 + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
-                                        zip.file(preName + '_5').async("base64").then(function (data5) {
-                                            $('#A' + num).append('<img src="data:image/jpeg;base64,' + data5 + '" class="card-img-top img-responsive center-block">');
+                    var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
+                    zip.file(preName + '_0').async("arraybuffer").then(function (data0) {
+                        imgBlob0 = new Blob([data0]);
+                        hTxt=hTxt.replace(/IMAGE0/,'<img src="' + window.URL.createObjectURL(imgBlob0) + '" class="card-img-top img-responsive center-block">');
+                        zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (data1) {
+                            imgBlob1 = new Blob([data1]);
+                            hTxt=hTxt.replace(/IMAGE1/,'<img src="' + window.URL.createObjectURL(imgBlob1) + '" class="img-responsive">');
+                            zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (data2) {
+                                imgBlob2 = new Blob([data2]);
+                                hTxt=hTxt.replace(/IMAGE2/,'<img src="' + window.URL.createObjectURL(imgBlob2) + '" class="img-responsive">');
+                                zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (data3) {
+                                    imgBlob3 = new Blob([data3]);
+                                    hTxt=hTxt.replace(/IMAGE3/,'<img src="' + window.URL.createObjectURL(imgBlob3) + '" class="img-responsive">');
+                                    zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (data4) {
+                                        imgBlob4 = new Blob([data4]);
+                                        hTxt=hTxt.replace(/IMAGE4/,'<img src="' + window.URL.createObjectURL(imgBlob4) + '" class="img-responsive">');
+                                        zip.file(preName + '_5').async("arraybuffer").then(function (data5) {
+                                            imgBlob5 = new Blob([data5]);
+                                            hTxt=hTxt.replace(/IMAGE5/,'<img src="' + window.URL.createObjectURL(imgBlob5) + '" class="card-img-top img-responsive center-block">');
+                                            resolve(num);
                                         });
                                     });
                                 });
                             });
                         });
                     });
-                    resolve(num);
                 });
             });
         });
         promised.then(function () {
-            if (num < rawstring.length) setTimeout(function () {
-                insHtml(num);
-            }, 1000);
+            $('#submit').before(hTxt);
+            if (num < rawstring.length) insHtml(num);
         });
-    }
-    function onImgLoad(num, f) {
-        if (f == 1)
-            $('#Q' + num + 'C1_div').css("height") > $('#Q' + num + 'C2_div').css("height") ?
-                    $('#Q' + num + 'C2_div').css("height", $('#Q' + num + 'C1_div').css("height")) :
-                    $('#Q' + num + 'C1_div').css("height", $('#Q' + num + 'C2_div').css("height"));
-        else
-            $('#Q' + num + 'C3_div').css("height") > $('#Q' + num + 'C4_div').css("height") ?
-                    $('#Q' + num + 'C4_div').css("height", $('#Q' + num + 'C3_div').css("height")) :
-                    $('#Q' + num + 'C3_div').css("height", $('#Q' + num + 'C4_div').css("height"));
     }
     function checkAnswer() {
         $(':checked').parent().parent().css('background-color', 'red');
         var len = rawstring.length;
         for (var i = 0; i < len; i++) {
-            $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1)).parent().parent().css('background-color', 'greenyellow');
+            $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1)+'_div').css('background-color', 'greenyellow');
         }
         answerChecked=true;
     }
@@ -193,7 +251,11 @@
         $(":radio").attr('disabled', '');
         $('progress').toggleClass('progress-animated');
         checkAnswer();
-    })
+    });
+    $(window).on('load', function() {
+        $("#circle").fadeOut(500);
+        $("#circle1").fadeOut(700);
+    });
 </script>
 </body>
 </html>
