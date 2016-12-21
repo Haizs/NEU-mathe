@@ -71,7 +71,7 @@
             <button type="button" class="btn btn-primary btn-lg center-block" name="复变函数_FB">复变函数</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-primary btn-lg center-block" name="数学分析_SF">数学分析</button>
+            <button type="button" class="btn btn-primary btn-lg center-block" name="数学分析_SF" disabled>数学分析</button>
         </div>
     </div>
 </div>
@@ -126,7 +126,7 @@
         window.ename = $(this).attr('name');
         $.ajax({
             type: "GET",
-            url: "proxy.php?exerciseHandler.ashx?dataSource=" + $(this).attr('name'),
+            url: "exerciseHandler.php?dataSource=" + $(this).attr('name'),
             async: false,
             success: function (data, status) {
                 if (status != 'success') {

@@ -107,37 +107,32 @@
                     throw error;
                 }
                 JSZip.loadAsync(data).then(function (zip) {
-                    var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
-                    zip.file(preName + '_0').async("arraybuffer").then(function (ab0) {
-                        imgBlob0 = new Blob([ab0]);
-                        $('#Q' + num).after('<img src="' + window.URL.createObjectURL(imgBlob0) + '" class="card-img-top img-responsive center-block">');
-                    });
-                    zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (ab1) {
-                        imgBlob1 = new Blob([ab1]);
-                        $('#Q' + num + 'C1').append('<img src="' + window.URL.createObjectURL(imgBlob1) + '" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (ab2) {
-                        imgBlob2 = new Blob([ab2]);
-                        $('#Q' + num + 'C2').append('<img src="' + window.URL.createObjectURL(imgBlob2) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
-                    });
-                    zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (ab3) {
-                        imgBlob3 = new Blob([ab3]);
-                        $('#Q' + num + 'C3').append('<img src="' + window.URL.createObjectURL(imgBlob3) + '" class="card-img-top img-responsive">');
-                    });
-                    zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (ab4) {
-                        imgBlob4 = new Blob([ab4]);
-                        $('#Q' + num + 'C4').append('<img src="' + window.URL.createObjectURL(imgBlob4) + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
-                    });
-                    zip.file(preName + '_5').async("arraybuffer").then(function (ab5) {
-                        imgBlob5 = new Blob([ab5]);
-                        $('#A' + num).append('<img src="' + window.URL.createObjectURL(imgBlob5) + '" class="card-img-top img-responsive center-block">');
+                    zip.file(preName + '_0').async("base64").then(function (data0) {
+                        $('#Q' + num).after('<img src="data:image/jpeg;base64,' + data0 + '" class="card-img-top img-responsive center-block">');
+                        zip.file(preName + '_' + randomChoice[preName][0]).async("base64").then(function (data1) {
+                            $('#Q' + num + 'C1').append('<img src="data:image/jpeg;base64,' + data1 + '" class="card-img-top img-responsive">');
+                            zip.file(preName + '_' + randomChoice[preName][1]).async("base64").then(function (data2) {
+                                $('#Q' + num + 'C2').append('<img src="data:image/jpeg;base64,' + data2 + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',1)">');
+                                zip.file(preName + '_' + randomChoice[preName][2]).async("base64").then(function (data3) {
+                                    $('#Q' + num + 'C3').append('<img src="data:image/jpeg;base64,' + data3 + '" class="card-img-top img-responsive">');
+                                    zip.file(preName + '_' + randomChoice[preName][3]).async("base64").then(function (data4) {
+                                        $('#Q' + num + 'C4').append('<img src="data:image/jpeg;base64,' + data4 + '" class="card-img-top img-responsive" onload="onImgLoad(' + num + ',2)">');
+                                        zip.file(preName + '_5').async("base64").then(function (data5) {
+                                            $('#A' + num).append('<img src="data:image/jpeg;base64,' + data5 + '" class="card-img-top img-responsive center-block">');
+                                        });
+                                    });
+                                });
+                            });
+                        });
                     });
                     resolve(num);
                 });
             });
         });
         promised.then(function () {
-            if (num < rawstring.length) insHtml(num);
+            if (num < rawstring.length) setTimeout(function () {
+                insHtml(num);
+            }, 1000);
         });
     }
     function onImgLoad(num, f) {
@@ -171,7 +166,7 @@
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
-            url: 'proxy.php?generateExerciseChoice.ashx?Id=' + getUrlParam('Id') + '&DataSource=' + getUrlParam('DataSource'),
+            url: 'generateExerciseChoice.php?Id=' + getUrlParam('Id') + '&DataSource=' + getUrlParam('DataSource'),
             async: false,
             success: function (data, status) {
                 if (status != 'success') {
