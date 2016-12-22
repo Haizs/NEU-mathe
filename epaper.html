@@ -15,107 +15,178 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .card-title {
             margin: .5rem;
         }
+
         .custom-control {
             display: inline-block;
             width: auto;
             height: auto;
         }
+
         .img-responsive {
             max-width: 100%;
             height: auto;
         }
+
         .container-fluid {
             padding-top: 25px;
             padding-left: 10px;
             padding-right: 10px;
         }
+
         .progress {
             margin: 0;
         }
+
         body {
             height: 100%;
             background-image: url("leaf.png");
             background-attachment: fixed;
         }
+
         /* 圆圈加载*/
         #circle {
-            background-color: rgba(0,0,0,0);
-            border:5px solid rgba(0,183,229,0.9);/*颜色在这里修改*/
-            opacity:.9;
-            border-right:5px solid rgba(0,0,0,0);
-            border-left:5px solid rgba(0,0,0,0);
-            border-radius:50px;
+            background-color: rgba(0, 0, 0, 0);
+            border: 5px solid rgba(0, 183, 229, 0.9); /*颜色在这里修改*/
+            opacity: .9;
+            border-right: 5px solid rgba(0, 0, 0, 0);
+            border-left: 5px solid rgba(0, 0, 0, 0);
+            border-radius: 50px;
             box-shadow: 0 0 35px #2187e7;
-            width:50px;
-            height:50px;
-            margin:0 auto;
-            position:fixed;
-            left:30px;
-            bottom:30px;
-            -moz-animation:spinPulse 1s infinite ease-in-out;
-            -webkit-animation:spinPulse 1s infinite ease-in-out;
-            -o-animation:spinPulse 1s infinite ease-in-out;
-            -ms-animation:spinPulse 1s infinite ease-in-out;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            position: fixed;
+            left: 30px;
+            bottom: 30px;
+            -moz-animation: spinPulse 1s infinite ease-in-out;
+            -webkit-animation: spinPulse 1s infinite ease-in-out;
+            -o-animation: spinPulse 1s infinite ease-in-out;
 
         }
+
         #circle1 {
-            background-color: rgba(0,0,0,0);
-            border:5px solid rgba(0,183,229,0.9);/*颜色在这里修改*/
-            opacity:.9;
-            border-left:5px solid rgba(0,0,0,0);
-            border-right:5px solid rgba(0,0,0,0);
-            border-radius:50px;
+            background-color: rgba(0, 0, 0, 0);
+            border: 5px solid rgba(0, 183, 229, 0.9); /*颜色在这里修改*/
+            opacity: .9;
+            border-left: 5px solid rgba(0, 0, 0, 0);
+            border-right: 5px solid rgba(0, 0, 0, 0);
+            border-radius: 50px;
             box-shadow: 0 0 15px #2187e7;
-            width:30px;
-            height:30px;
-            margin:0 auto;
-            position:fixed;
-            left:40px;
-            bottom:40px;
-            -moz-animation:spinoffPulse 1s infinite linear;
-            -webkit-animation:spinoffPulse 1s infinite linear;
-            -o-animation:spinoffPulse 1s infinite linear;
-            -ms-animation:spinoffPulse 1s infinite linear;
+            width: 30px;
+            height: 30px;
+            margin: 0 auto;
+            position: fixed;
+            left: 40px;
+            bottom: 40px;
+            -moz-animation: spinoffPulse 1s infinite linear;
+            -webkit-animation: spinoffPulse 1s infinite linear;
+            -o-animation: spinoffPulse 1s infinite linear;
         }
+
         @-moz-keyframes spinPulse {
-            0% { -moz-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050;}
-            50% { -moz-transform:rotate(145deg); opacity:1; }
-            100% { -moz-transform:rotate(-320deg); opacity:0; }
+            0% {
+                -moz-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #505050;
+            }
+            50% {
+                -moz-transform: rotate(145deg);
+                opacity: 1;
+            }
+            100% {
+                -moz-transform: rotate(-320deg);
+                opacity: 0;
+            }
         }
+
         @-moz-keyframes spinoffPulse {
-            0% { -moz-transform:rotate(0deg); }
-            100% { -moz-transform:rotate(360deg);  }
+            0% {
+                -moz-transform: rotate(0deg);
+            }
+            100% {
+                -moz-transform: rotate(360deg);
+            }
         }
+
         @-webkit-keyframes spinPulse {
-            0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
-            50% { -webkit-transform:rotate(145deg); opacity:1;}
-            100% { -webkit-transform:rotate(-320deg); opacity:0; }
+            0% {
+                -webkit-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #505050;
+            }
+            50% {
+                -webkit-transform: rotate(145deg);
+                opacity: 1;
+            }
+            100% {
+                -webkit-transform: rotate(-320deg);
+                opacity: 0;
+            }
         }
+
         @-webkit-keyframes spinoffPulse {
-            0% { -webkit-transform:rotate(0deg); }
-            100% { -webkit-transform:rotate(360deg); }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
+
         @-o-keyframes spinPulse {
-            0% { -o-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
-            50% { -o-transform:rotate(145deg); opacity:1;}
-            100% { -o-transform:rotate(-320deg); opacity:0; }
+            0% {
+                -o-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #505050;
+            }
+            50% {
+                -o-transform: rotate(145deg);
+                opacity: 1;
+            }
+            100% {
+                -o-transform: rotate(-320deg);
+                opacity: 0;
+            }
         }
+
         @-o-keyframes spinoffPulse {
-            0% { -o-transform:rotate(0deg); }
-            100% { -o-transform:rotate(360deg); }
+            0% {
+                -o-transform: rotate(0deg);
+            }
+            100% {
+                -o-transform: rotate(360deg);
+            }
         }
+
         @-ms-keyframes spinPulse {
-            0% { -ms-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #505050; }
-            50% { -ms-transform:rotate(145deg); opacity:1;}
-            100% { -ms-transform:rotate(-320deg); opacity:0; }
+            0% {
+                -ms-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #505050;
+            }
+            50% {
+                -ms-transform: rotate(145deg);
+                opacity: 1;
+            }
+            100% {
+                -ms-transform: rotate(-320deg);
+                opacity: 0;
+            }
         }
+
         @-ms-keyframes spinoffPulse {
-            0% { -ms-transform:rotate(0deg); }
-            100% { -ms-transform:rotate(360deg); }
+            0% {
+                -ms-transform: rotate(0deg);
+            }
+            100% {
+                -ms-transform: rotate(360deg);
+            }
         }
+
         /*=======*/
     </style>
 </head>
@@ -172,22 +243,22 @@
                     var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
                     zip.file(preName + '_0').async("arraybuffer").then(function (data0) {
                         imgBlob0 = new Blob([data0]);
-                        hTxt=hTxt.replace(/IMAGE0/,'<img src="' + window.URL.createObjectURL(imgBlob0) + '" class="card-img-top img-responsive center-block">');
+                        hTxt = hTxt.replace(/IMAGE0/, '<img src="' + window.URL.createObjectURL(imgBlob0) + '" class="card-img-top img-responsive center-block">');
                         zip.file(preName + '_' + randomChoice[preName][0]).async("arraybuffer").then(function (data1) {
                             imgBlob1 = new Blob([data1]);
-                            hTxt=hTxt.replace(/IMAGE1/,'<img src="' + window.URL.createObjectURL(imgBlob1) + '" class="img-responsive">');
+                            hTxt = hTxt.replace(/IMAGE1/, '<img src="' + window.URL.createObjectURL(imgBlob1) + '" class="img-responsive">');
                             zip.file(preName + '_' + randomChoice[preName][1]).async("arraybuffer").then(function (data2) {
                                 imgBlob2 = new Blob([data2]);
-                                hTxt=hTxt.replace(/IMAGE2/,'<img src="' + window.URL.createObjectURL(imgBlob2) + '" class="img-responsive">');
+                                hTxt = hTxt.replace(/IMAGE2/, '<img src="' + window.URL.createObjectURL(imgBlob2) + '" class="img-responsive">');
                                 zip.file(preName + '_' + randomChoice[preName][2]).async("arraybuffer").then(function (data3) {
                                     imgBlob3 = new Blob([data3]);
-                                    hTxt=hTxt.replace(/IMAGE3/,'<img src="' + window.URL.createObjectURL(imgBlob3) + '" class="img-responsive">');
+                                    hTxt = hTxt.replace(/IMAGE3/, '<img src="' + window.URL.createObjectURL(imgBlob3) + '" class="img-responsive">');
                                     zip.file(preName + '_' + randomChoice[preName][3]).async("arraybuffer").then(function (data4) {
                                         imgBlob4 = new Blob([data4]);
-                                        hTxt=hTxt.replace(/IMAGE4/,'<img src="' + window.URL.createObjectURL(imgBlob4) + '" class="img-responsive">');
+                                        hTxt = hTxt.replace(/IMAGE4/, '<img src="' + window.URL.createObjectURL(imgBlob4) + '" class="img-responsive" onload="onImgLoad(' + num + ')">');
                                         zip.file(preName + '_5').async("arraybuffer").then(function (data5) {
                                             imgBlob5 = new Blob([data5]);
-                                            hTxt=hTxt.replace(/IMAGE5/,'<img src="' + window.URL.createObjectURL(imgBlob5) + '" class="card-img-top img-responsive center-block">');
+                                            hTxt = hTxt.replace(/IMAGE5/, '<img src="' + window.URL.createObjectURL(imgBlob5) + '" class="card-img-top img-responsive center-block">');
                                             resolve(num);
                                         });
                                     });
@@ -203,13 +274,27 @@
             if (num < rawstring.length) insHtml(num);
         });
     }
+    function max(a, b) {
+        return (a > b) ? a : b;
+    }
+    function onImgLoad(num) {
+        var div1 = $('#Q' + num + 'C1_div');
+        var div2 = $('#Q' + num + 'C2_div');
+        var div3 = $('#Q' + num + 'C3_div');
+        var div4 = $('#Q' + num + 'C4_div');
+        var h = max(div1.css('height'), max(div2.css('height'), max(div3.css('height'), div4.css('height'))));
+        div1.css('height', h);
+        div2.css('height', h);
+        div3.css('height', h);
+        div4.css('height', h);
+    }
     function checkAnswer() {
         $(':checked').parent().parent().css('background-color', 'red');
         var len = rawstring.length;
         for (var i = 0; i < len; i++) {
-            $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1)+'_div').css('background-color', 'greenyellow');
+            $('#Q' + (parseInt(i) + 1) + 'C' + (parseInt(randomChoice[rawstring[i]].indexOf(1)) + 1) + '_div').css('background-color', 'greenyellow');
         }
-        answerChecked=true;
+        answerChecked = true;
     }
     function countdownTime() {
         countdown -= 1;
@@ -217,7 +302,7 @@
         if (countdown == 0) {
             $('#submit').click();
         }
-        if (countdown > 0 && answerChecked==false) setTimeout(function () {
+        if (countdown > 0 && answerChecked == false) setTimeout(function () {
             countdownTime();
         }, 1000);
     }
@@ -235,7 +320,7 @@
                 }
             }
         });
-        window.answerChecked=false;
+        window.answerChecked = false;
         window.randomChoice = {};
         insHtml(0);
         window.countdown = 90 * 60;
@@ -243,7 +328,7 @@
         countdownTime();
     });
     $('#submit').on('click', function () {
-        if (answerChecked==true) window.location.replace(window.location.href);
+        if (answerChecked == true) window.location.replace(window.location.href);
         $('.collapse').collapse('toggle');
         $('body,html').animate({scrollTop: 0}, 1000);
         $(this).toggleClass('btn-primary btn-danger');
@@ -252,7 +337,7 @@
         $('progress').toggleClass('progress-animated');
         checkAnswer();
     });
-    $(window).on('load', function() {
+    $(window).on('load', function () {
         $("#circle").fadeOut(500);
         $("#circle1").fadeOut(700);
     });
