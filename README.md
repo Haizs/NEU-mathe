@@ -1,4 +1,17 @@
 # NEU-mathe
+
+## Version 2
+
+Based on [Vue.js](https://github.com/vuejs/vue) and [element](https://github.com/ElemeFE/element).
+
+Using PHP with MySQL and Redis.
+
+Build while learning.
+
+## Old version
+
+See [Branch: old](https://github.com/Haizs/NEU-mathe/tree/old).
+
 ## What ?
 
 * An unofficial Mathe System for NEU.

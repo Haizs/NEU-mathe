@@ -1,5 +1,4 @@
 .idea/
+.backup/
 ChoiceSource/
-TeacherChoice/
 .DS_Store
-ftp.php
