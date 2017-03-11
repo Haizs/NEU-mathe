@@ -1,0 +1,108 @@
+html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-image: url('background.png');
+    background-size: 187px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    height: 42px;
+    width: 100%;
+    overflow: hidden;
+    z-index: 9;
+}
+
+#site-title {
+    color: #38b7ea;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 27px;
+}
+
+.wrap {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+#container {
+    position: relative;
+    max-width: 960px;
+    min-height: 390px;
+    margin: 0 auto;
+    flex: 1;
+    -webkit-flex: 1;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+
+#avatar {
+    float: right;
+    padding: 5px 27px;
+}
+
+#avatar img {
+    border-radius: 50%;
+}
+
+#type {
+    z-index: 1;
+    position: relative;
+    margin-top: 42px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.subject {
+    text-align: center;
+}
+
+.subject .el-button--large {
+    font-size: 20px;
+    padding: 15px 27px;
+}
+
+footer {
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
+    text-align: center;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+#site-info {
+    border-bottom: 1px dashed #DCDCDC;
+    color: #636363;
+    font-size: 14px;
+    padding: 8px 0;
+}
+
+#copyright {
+    color: #828282;
+    font-size: 12px;
+    padding: 8px 0;
+}
