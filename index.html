@@ -19,66 +19,177 @@
             </div>
         </div>
         <div id="avatar">
-            <img v-bind:src="avatarurl">
+            <img v-bind:src="avatarURL">
         </div>
     </div>
 </header>
 <div id="container">
     <div id="type">
-        <el-radio-group v-model='radiotype' size='large'>
-            <el-radio-button size='large' label="闯关练习"></el-radio-button>
-            <el-radio-button size='large' label="模拟试卷"></el-radio-button>
+        <el-radio-group v-model='radioType' size='large'>
+            <el-radio-button v-for="type in types" size='large' :label="type.name" :key="type.id"></el-radio-button>
         </el-radio-group>
     </div>
     <div class="subject" v-for="sjt in subjects">
-        <el-button type="primary" size="large" @click="dialogVisible = true">{{sjt.name}}</el-button>
+        <el-button type="primary" size="large"
+                   @click="selectedSubject=sjt;loadChapter()">{{sjt.name}}
+        </el-button>
     </div>
     <div id="dialog">
-        <el-dialog title="" v-model="dialogVisible" size="large">
-            <span></span>
+        <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="10%" size="large"
+                   :close-on-click-modal="false">
+            <span>
+                <el-alert v-if="networkError" title="网络错误" type="error" description="无法加载，请重试"
+                          show-icon :closable="false">
+                </el-alert>
+                <el-tabs v-else v-model="dialogTab" type="card" v-loading="loadingChapter">
+                    <el-tab-pane label="考点选择" name="selection">
+                        <el-tree :data="topics" :props="defaultProps" node-key="id" ref="tree" show-checkbox accordion>
+                        </el-tree>
+                    </el-tab-pane>
+                    <el-tab-pane label="高级设置" name="configure">
+                        配置管理
+                    </el-tab-pane>
+                </el-tabs>
+            </span>
             <span slot="footer" class="dialog-footer">
+                <el-button @click="checkedClear();dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="showPaper();" :disabled="networkError">开始作答</el-button>
             </span>
         </el-dialog>
     </div>
 </div>
 <footer id="footer">
     <div class="wrap">
-        <div id="site-info">
-            Version 2017.03
-        </div>
         <div id="copyright">
-            海之树<br/>
+            海之树 · 2017.03<br/>
             <i>https://GitHub.com/Haizs/NEU-mathe</i>
         </div>
     </div>
 </footer>
 <script src="js/vue.js"></script>
 <script src="js/element-ui.js"></script>
+<script src="js/axios.min.js"></script>
 <script>
     var header = new Vue({
         el: '#header',
         data: {
-            avatarurl: 'https://www.gravatar.com/avatar/?s=32'
+            avatarURL: ''//'https://www.gravatar.com/avatar/?s=32'
         }
     });
-    var dfc = {
-        data: function () {
-            return {
-                radiotype: '闯关练习',
-                dialogVisible: false
-            };
-        }
-    };
-    var Ctor = Vue.extend(dfc);
-    var subject = new Ctor({
+    var app = new Vue({
         el: '#container',
         data: {
+            radioType: '模拟练习',
+            dialogTab: 'selection',
+            dialogVisible: false,
+            loadingChapter: false,
+            networkError: false,
+            types: [
+                {name: '模拟练习', id: 0},
+                {name: '仿真测验', id: 1}
+            ],
             subjects: [
-                {name: '高等数学'},
-                {name: '概率统计'},
-                {name: '复变函数'},
-                {name: '线性代数'}
-            ]
+                {name: '高等数学', id: 'GS'},
+                {name: '概率统计', id: 'GL'},
+                {name: '复变函数', id: 'FB'},
+                {name: '线性代数', id: 'XD'}
+            ],
+            selectedSubject: {},
+            topics: [], /*[
+             {
+             label: '一级 1',
+             children: [{
+             label: '二级 1-1',
+             id: 1,
+             children: [{
+             id: 10,
+             label: '三级 1-1-1'
+             }]
+             }]
+             }, {
+             label: '一级 2',
+             id: 2,
+             children: [{
+             label: '二级 2-1',
+             id: 3,
+             children: [{
+             label: '三级 2-1-1',
+             id: 4
+             }]
+             }, {
+             label: '二级 2-2',
+             id: 5,
+             children: [{
+             label: '三级 2-2-1',
+             id: 6
+             }]
+             }]
+             }, {
+             label: '一级 3',
+             id: 7,
+             children: [{
+             label: '二级 3-1',
+             id: 8,
+             children: [{
+             label: '三级 3-1-1',
+             id: 9
+             }]
+             }, {
+             label: '二级 3-2',
+             id: 11,
+             children: [{
+             label: '三级 3-2-1',
+             id: 12
+             }]
+             }]
+             }],*/
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            }
+        },
+        computed: {
+            typeID: function () {
+                return this.types.find(function (e) {
+                    return e.name === app.radioType;
+                }).id;
+            },
+            subjectID: function () {
+                return this.selectedSubject.id;
+            }
+        },
+        methods: {
+            loadChapter: function () {
+                this.topics = [];
+                this.loadingChapter = true;
+                this.dialogVisible = true;
+                this.networkError = false;
+                axios.get('getChapter.php', {
+                    params: {
+                        subject: this.subjectID
+                    }
+                }).then(function (response) {
+                    if (response.status !== 200) {
+                        app.networkError = true;
+                    }
+                    app.networkError = true;
+
+                    console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            checkedClear: function () {
+                if (!this.networkError) {
+                    var checkedKeys = this.$refs.tree.getCheckedKeys();
+                    for (var id in checkedKeys) {
+                        if (checkedKeys.hasOwnProperty(id)) this.$refs.tree.setChecked(checkedKeys[id], false, true);
+                    }
+                }
+            },
+            showPaper: function () {
+
+            }
         }
     })
 </script>
