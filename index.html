@@ -19,7 +19,7 @@
             </div>
         </div>
         <div id="avatar">
-            <img v-bind:src="avatarURL">
+            <img :src="avatarURL">
         </div>
     </div>
 </header>
@@ -35,8 +35,8 @@
         </el-button>
     </div>
     <div id="dialog">
-        <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="10%" size="large"
-                   :close-on-click-modal="false">
+        <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="8%" size="large"
+                   :close-on-click-modal="false" custom-class="wrap">
             <span>
                 <el-alert v-if="networkError" title="网络错误" type="error" description="无法加载，请重试"
                           show-icon :closable="false">
@@ -47,12 +47,32 @@
                         </el-tree>
                     </el-tab-pane>
                     <el-tab-pane label="高级设置" name="configure">
-                        配置管理
+                        <el-form label-position="right" label-width="80px" :model="advancedSettings">
+                            <el-form-item label="测试题数">
+                                <el-slider v-model="advancedSettings.problemCount" :min="15" :max="40"
+                                           show-input></el-slider>
+                            </el-form-item>
+                            <el-form-item label="测试时间">
+                                <el-slider v-model="advancedSettings.examTime" :min="60" :max="120" :step="5" show-stops
+                                           show-input></el-slider>
+                            </el-form-item>
+                            <el-form-item label="自显解析">
+                                <el-switch on-text="" off-text="" v-model="advancedSettings.autoAnswer"></el-switch>
+                            </el-form-item>
+                            <el-form-item label="自定模板">
+                                <el-input v-model="advancedSettings.choiceTemplate" type="textarea" :rows="2"
+                                          placeholder="默认请留空"></el-input>
+                            </el-form-item>
+                            <el-form-item label="自选题目">
+                                <el-input v-model="advancedSettings.choiceNumber" type="textarea" :rows="2"
+                                          placeholder="默认请留空"></el-input>
+                            </el-form-item>
+                        </el-form>
                     </el-tab-pane>
                 </el-tabs>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="checkedClear();dialogVisible = false">取消</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="showPaper();" :disabled="networkError">开始作答</el-button>
             </span>
         </el-dialog>
@@ -95,57 +115,17 @@
                 {name: '线性代数', id: 'XD'}
             ],
             selectedSubject: {},
-            topics: [], /*[
-             {
-             label: '一级 1',
-             children: [{
-             label: '二级 1-1',
-             id: 1,
-             children: [{
-             id: 10,
-             label: '三级 1-1-1'
-             }]
-             }]
-             }, {
-             label: '一级 2',
-             id: 2,
-             children: [{
-             label: '二级 2-1',
-             id: 3,
-             children: [{
-             label: '三级 2-1-1',
-             id: 4
-             }]
-             }, {
-             label: '二级 2-2',
-             id: 5,
-             children: [{
-             label: '三级 2-2-1',
-             id: 6
-             }]
-             }]
-             }, {
-             label: '一级 3',
-             id: 7,
-             children: [{
-             label: '二级 3-1',
-             id: 8,
-             children: [{
-             label: '三级 3-1-1',
-             id: 9
-             }]
-             }, {
-             label: '二级 3-2',
-             id: 11,
-             children: [{
-             label: '三级 3-2-1',
-             id: 12
-             }]
-             }]
-             }],*/
+            topics: [],
             defaultProps: {
                 children: 'children',
-                label: 'label'
+                label: 'name'
+            },
+            advancedSettings: {
+                problemCount: 0,
+                examTime: 0,
+                autoAnswer: false,
+                choiceTemplate: '',
+                choiceNumber: ''
             }
         },
         computed: {
@@ -159,11 +139,20 @@
             }
         },
         methods: {
+            dialogInit: function () {
+                this.dialogTab = 'selection';
+                this.advancedSettings.problemCount = 25;
+                this.advancedSettings.examTime = 90;
+                this.advancedSettings.autoAnswer = false;
+                this.advancedSettings.choiceTemplate = '';
+                this.advancedSettings.choiceNumber = '';
+            },
             loadChapter: function () {
                 this.topics = [];
                 this.loadingChapter = true;
                 this.dialogVisible = true;
                 this.networkError = false;
+                this.dialogInit();
                 axios.get('getChapter.php', {
                     params: {
                         subject: this.subjectID
@@ -172,20 +161,12 @@
                     if (response.status !== 200) {
                         app.networkError = true;
                     }
-                    app.networkError = true;
-
-                    console.log(response);
+                    app.networkError = false;
+                    app.topics = response.data;
+                    app.loadingChapter = false;
                 }).catch(function (error) {
-                    console.log(error);
+                    app.networkError = true;
                 });
-            },
-            checkedClear: function () {
-                if (!this.networkError) {
-                    var checkedKeys = this.$refs.tree.getCheckedKeys();
-                    for (var id in checkedKeys) {
-                        if (checkedKeys.hasOwnProperty(id)) this.$refs.tree.setChecked(checkedKeys[id], false, true);
-                    }
-                }
             },
             showPaper: function () {
 
