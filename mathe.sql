@@ -8443,6 +8443,33 @@ INSERT INTO `GS_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
   (5431, 155, 2, '/高等数学_GS/155/Averge/', '155_Averge_d4b75818-7980-4218-ad84-a6e3029e23c7', 6),
   (5432, 155, 3, '/高等数学_GS/155/Hard/', '155_Hard_c27443d7-a57d-4e64-8abc-023c5c2efeb2', 6);
 
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `XD_Chapter`
+--
+
+CREATE TABLE `XD_Chapter` (
+  `Id`   INT(1)      DEFAULT NULL,
+  `Pid`  INT(1)      DEFAULT NULL,
+  `Name` VARCHAR(13) DEFAULT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- 转存表中的数据 `XD_Chapter`
+--
+
+INSERT INTO `XD_Chapter` (`Id`, `Pid`, `Name`) VALUES
+  (1, 0, '第一章 行列式'),
+  (2, 0, '第二章 矩阵'),
+  (3, 0, '第三章 向量组线性相关性'),
+  (4, 0, '第四章 线性方程组'),
+  (5, 0, '第五章 矩阵相似对角化'),
+  (6, 0, '第六章 二次型'),
+  (7, 0, '第七章 线性空间与线性变换');
+
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;

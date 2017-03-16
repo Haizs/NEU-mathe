@@ -30,9 +30,7 @@
         </el-radio-group>
     </div>
     <div class="subject" v-for="sjt in subjects">
-        <el-button type="primary" size="large"
-                   @click="selectedSubject=sjt;showDialog()">{{sjt.name}}
-        </el-button>
+        <el-button type="primary" size="large" @click="selectedSubject=sjt;showDialog()" v-text="sjt.name"></el-button>
     </div>
     <div id="dialog">
         <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="5%" size="large"
@@ -91,7 +89,8 @@
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="showPaper();" :disabled="networkError">{{startButton}}</el-button>
+                <el-button type="primary" @click="showPaper();" :disabled="networkError"
+                           v-text="startButton"></el-button>
             </span>
         </el-dialog>
     </div>
