@@ -66,13 +66,25 @@
                         </el-tab-pane>
                     </template>
                     <template v-else>
-                        <el-tab-pane label="自定模板" name="template">
-                            <el-input v-model="customTemplate" type="textarea" :rows="5"
-                                      placeholder="*_*_*_*"></el-input>
+                        <el-tab-pane label="考点选择" name="selection">
+                            <el-form label-position="top" label-width="80px">
+                                <el-form-item label="自定模板" name="template">
+                                    <el-input v-model="customTemplate" type="textarea" :rows="3"
+                                              placeholder="*_*_*_*"></el-input>
+                                </el-form-item>
+                                <el-form-item label="自选题目" name="problem">
+                                    <el-input v-model="customProblem" type="textarea" :rows="3"
+                                              placeholder="*.zip"></el-input>
+                                </el-form-item>
+                            </el-form>
                         </el-tab-pane>
-                        <el-tab-pane label="自选题目" name="problem">
-                            <el-input v-model="customProblem" type="textarea" :rows="5"
-                                      placeholder="*.zip"></el-input>
+                        <el-tab-pane label="高级设置" name="configure">
+                            <el-form label-position="right" label-width="66px">
+                                <el-form-item label="时间">
+                                    <el-slider v-model="eTime" :min="60" :max="120" :step="5" show-stops
+                                               show-input></el-slider>
+                                </el-form-item>
+                            </el-form>
                         </el-tab-pane>
                     </template>
                 </el-tabs>
@@ -143,14 +155,14 @@
         },
         methods: {
             showDialog: function () {
-                this.dialogTab = (this.radioType == this.types[0].name) ? 'selection' : 'template';
+                this.dialogTab = 'selection';
                 this.dialogVisible = true;
+                this.eTime = 90;
                 if (this.radioType == this.types[0].name) {
                     this.networkError = false;
                     this.topics = [];
                     this.zenMode = false;
                     this.eCount = 25;
-                    this.eTime = 90;
                     this.loadingChapter = true;
                     axios.get('getChapter.php', {
                         params: {
@@ -178,10 +190,11 @@
                     if (this.zenMode) url += '&zen=1';
                     else url += '&count=' + this.eCount + '&time=' + this.eTime;
                 } else {
+                    url += '&time=' + this.eTime;
                     url += '&template=' + this.customTemplate;
                     url += '&problem=' + this.customProblem;
                 }
-                console.log(url);
+                window.location.href = url;
             }
         }
     })
