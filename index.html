@@ -31,49 +31,55 @@
     </div>
     <div class="subject" v-for="sjt in subjects">
         <el-button type="primary" size="large"
-                   @click="selectedSubject=sjt;loadChapter()">{{sjt.name}}
+                   @click="selectedSubject=sjt;showDialog()">{{sjt.name}}
         </el-button>
     </div>
     <div id="dialog">
-        <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="8%" size="large"
+        <el-dialog :title="selectedSubject.name+' - '+radioType" v-model="dialogVisible" top="5%" size="large"
                    :close-on-click-modal="false" custom-class="wrap">
             <span>
                 <el-alert v-if="networkError" title="网络错误" type="error" description="无法加载，请重试"
                           show-icon :closable="false">
                 </el-alert>
                 <el-tabs v-else v-model="dialogTab" type="card" v-loading="loadingChapter">
-                    <el-tab-pane label="考点选择" name="selection">
-                        <el-tree :data="topics" :props="defaultProps" node-key="id" ref="tree" show-checkbox accordion>
-                        </el-tree>
-                    </el-tab-pane>
-                    <el-tab-pane label="高级设置" name="configure">
-                        <el-form label-position="right" label-width="80px" :model="advancedSettings">
-                            <el-form-item label="测试题数">
-                                <el-slider v-model="advancedSettings.problemCount" :min="15" :max="40"
-                                           show-input></el-slider>
-                            </el-form-item>
-                            <el-form-item label="测试时间">
-                                <el-slider v-model="advancedSettings.examTime" :min="60" :max="120" :step="5" show-stops
-                                           show-input></el-slider>
-                            </el-form-item>
-                            <el-form-item label="自显解析">
-                                <el-switch on-text="" off-text="" v-model="advancedSettings.autoAnswer"></el-switch>
-                            </el-form-item>
-                            <el-form-item label="自定模板">
-                                <el-input v-model="advancedSettings.choiceTemplate" type="textarea" :rows="2"
-                                          placeholder="默认请留空"></el-input>
-                            </el-form-item>
-                            <el-form-item label="自选题目">
-                                <el-input v-model="advancedSettings.choiceNumber" type="textarea" :rows="2"
-                                          placeholder="默认请留空"></el-input>
-                            </el-form-item>
-                        </el-form>
-                    </el-tab-pane>
+                    <template v-if="radioType==types[0].name">
+                        <el-tab-pane label="考点选择" name="selection">
+                            <el-tree :data="topics" :props="defaultProps" node-key="id" ref="tree" show-checkbox
+                                     accordion>
+                            </el-tree>
+                        </el-tab-pane>
+                        <el-tab-pane label="高级设置" name="configure">
+                            <el-form label-position="right" label-width="66px">
+                                <el-form-item label="模式">
+                                    <el-switch v-model="zenMode" on-text="ZEN" off-text="普通"></el-switch>
+                                </el-form-item>
+                                <template v-if="!zenMode">
+                                    <el-form-item label="题数">
+                                        <el-slider v-model="eCount" :min="10" :max="40" show-input></el-slider>
+                                    </el-form-item>
+                                    <el-form-item label="时间">
+                                        <el-slider v-model="eTime" :min="60" :max="120" :step="5" show-stops
+                                                   show-input></el-slider>
+                                    </el-form-item>
+                                </template>
+                            </el-form>
+                        </el-tab-pane>
+                    </template>
+                    <template v-else>
+                        <el-tab-pane label="自定模板" name="template">
+                            <el-input v-model="customTemplate" type="textarea" :rows="5"
+                                      placeholder="*_*_*_*"></el-input>
+                        </el-tab-pane>
+                        <el-tab-pane label="自选题目" name="problem">
+                            <el-input v-model="customProblem" type="textarea" :rows="5"
+                                      placeholder="*.zip"></el-input>
+                        </el-tab-pane>
+                    </template>
                 </el-tabs>
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="showPaper();" :disabled="networkError">开始作答</el-button>
+                <el-button type="primary" @click="showPaper();" :disabled="networkError">{{startButton}}</el-button>
             </span>
         </el-dialog>
     </div>
@@ -100,7 +106,7 @@
         el: '#container',
         data: {
             radioType: '模拟练习',
-            dialogTab: 'selection',
+            dialogTab: '',
             dialogVisible: false,
             loadingChapter: false,
             networkError: false,
@@ -120,56 +126,62 @@
                 children: 'children',
                 label: 'name'
             },
-            advancedSettings: {
-                problemCount: 0,
-                examTime: 0,
-                autoAnswer: false,
-                choiceTemplate: '',
-                choiceNumber: ''
-            }
+            zenMode: false,
+            eCount: 0,
+            eTime: 0,
+            customTemplate: '',
+            customProblem: ''
         },
         computed: {
-            typeID: function () {
-                return this.types.find(function (e) {
-                    return e.name === app.radioType;
-                }).id;
-            },
-            subjectID: function () {
-                return this.selectedSubject.id;
+            startButton: function () {
+                if (this.radioType == this.types[0].name) {
+                    if (this.zenMode) return '开始修禅';
+                    else return '开始练习';
+                }
+                return '开始测试';
             }
         },
         methods: {
-            dialogInit: function () {
-                this.dialogTab = 'selection';
-                this.advancedSettings.problemCount = 25;
-                this.advancedSettings.examTime = 90;
-                this.advancedSettings.autoAnswer = false;
-                this.advancedSettings.choiceTemplate = '';
-                this.advancedSettings.choiceNumber = '';
-            },
-            loadChapter: function () {
-                this.topics = [];
-                this.loadingChapter = true;
+            showDialog: function () {
+                this.dialogTab = (this.radioType == this.types[0].name) ? 'selection' : 'template';
                 this.dialogVisible = true;
-                this.networkError = false;
-                this.dialogInit();
-                axios.get('getChapter.php', {
-                    params: {
-                        subject: this.subjectID
-                    }
-                }).then(function (response) {
-                    if (response.status !== 200) {
+                if (this.radioType == this.types[0].name) {
+                    this.networkError = false;
+                    this.topics = [];
+                    this.zenMode = false;
+                    this.eCount = 25;
+                    this.eTime = 90;
+                    this.loadingChapter = true;
+                    axios.get('getChapter.php', {
+                        params: {
+                            subject: this.selectedSubject.id
+                        }
+                    }).then(function (response) {
+                        if (response.status !== 200) {
+                            app.networkError = true;
+                        }
+                        app.networkError = false;
+                        app.topics = response.data;
+                        app.loadingChapter = false;
+                    }).catch(function (error) {
                         app.networkError = true;
-                    }
-                    app.networkError = false;
-                    app.topics = response.data;
-                    app.loadingChapter = false;
-                }).catch(function (error) {
-                    app.networkError = true;
-                });
+                    });
+                } else {
+                    this.customTemplate = '';
+                    this.customProblem = '';
+                }
             },
             showPaper: function () {
-
+                var url = 'paper.html?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
+                if (this.radioType == this.types[0].name) {
+                    url += '&id=' + this.$refs.tree.getCheckedKeys().toString();
+                    if (this.zenMode) url += '&zen=1';
+                    else url += '&count=' + this.eCount + '&time=' + this.eTime;
+                } else {
+                    url += '&template=' + this.customTemplate;
+                    url += '&problem=' + this.customProblem;
+                }
+                console.log(url);
             }
         }
     })
