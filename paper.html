@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>NEU-Mathe</title>
+    <link rel="stylesheet" href="css/element-ui.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="header">
+    <div class="wrap">
+        <el-progress v-if="showCountdown" :percentage="countdown" status="exception" :show-text="false"
+                     :stroke-width="9"></el-progress>
+        <el-progress v-if="showProgress" :percentage="progress" :status="progressStatus" :show-text="false"
+                     :stroke-width="9"></el-progress>
+    </div>
+</header>
+<div id="container">
+</div>
+<footer id="footer">
+    <div class="wrap">
+        <div id="copyright">
+            海之树 · 2017.03<br/>
+            <i>https://GitHub.com/Haizs/NEU-mathe</i>
+        </div>
+    </div>
+</footer>
+<script src="js/vue.js"></script>
+<script src="js/element-ui.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/jszip.min.js"></script>
+<script src="js/jszip-utils.min.js"></script>
+<script>
+    String.prototype.trim = function (Useless) {
+        var regex = eval("/^" + Useless + "*|" + Useless + "*$/g");
+        return this.replace(regex, "");
+    };
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+    var header = new Vue({
+        el: '#header',
+        data: {
+            countdown: 100,
+            showCountdown: true,
+            progress: 40,
+            showProgress: false,
+            progressStatus: ''
+        }
+    });
+    header.showCountdown = (getUrlParam('zen') != 1);
+    header.showProgress = (getUrlParam('zen') == 1);
+    var app = new Vue({
+        el: '#container',
+        data: {},
+        computed: {},
+        methods: {}
+    })
+</script>
+</body>

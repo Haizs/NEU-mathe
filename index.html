@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header id="header">
+<header id="header" class="header">
     <div class="wrap">
         <div id="logo">
             <div id="site-title">
@@ -155,14 +155,17 @@
         },
         methods: {
             showDialog: function () {
+                this.loadingChapter = false;
+                this.networkError = false;
+                this.topics = [];
+                this.zenMode = false;
+                this.eTime = 90;
+                this.eCount = 25;
+                this.customTemplate = '';
+                this.customProblem = '';
                 this.dialogTab = 'selection';
                 this.dialogVisible = true;
-                this.eTime = 90;
                 if (this.radioType == this.types[0].name) {
-                    this.networkError = false;
-                    this.topics = [];
-                    this.zenMode = false;
-                    this.eCount = 25;
                     this.loadingChapter = true;
                     axios.get('getChapter.php', {
                         params: {
@@ -171,6 +174,7 @@
                     }).then(function (response) {
                         if (response.status !== 200) {
                             app.networkError = true;
+                            return;
                         }
                         app.networkError = false;
                         app.topics = response.data;
@@ -178,13 +182,12 @@
                     }).catch(function (error) {
                         app.networkError = true;
                     });
-                } else {
-                    this.customTemplate = '';
-                    this.customProblem = '';
                 }
             },
             showPaper: function () {
-                var url = 'paper.html?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
+                var url = 'paper.html';
+                url += '?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
+                url += '&subject=' + this.selectedSubject.id;
                 if (this.radioType == this.types[0].name) {
                     url += '&id=' + this.$refs.tree.getCheckedKeys().toString();
                     if (this.zenMode) url += '&zen=1';
