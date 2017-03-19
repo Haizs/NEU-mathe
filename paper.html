@@ -42,8 +42,8 @@
             </el-card>
         </div>
     </template>
-    <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer">Submit</el-button>
-    <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage">Retry</el-button>
+    <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Submit'"></el-button>
+    <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage" v-text="'Retry'"></el-button>
 </div>
 <footer id="footer">
     <div class="wrap">
@@ -89,29 +89,39 @@
             }
             app.correctChoice.push(randomChoice.indexOf(1) + 1);
             var filename = [];
-            for (var i = 0; i <= 5; i++) filename[i] = source['Name'] + '_' + i;
+            if (getUrlParam('subject') != 'XD') {
+                for (var i = 0; i <= 5; i++) filename[i] = RegExp(source['Name'] + '_' + i);
+            } else {
+                if (getUrlParam('id').indexOf('8') != -1) {
+                    filename[0] = RegExp(source['Name'] + '.jpg');
+                    for (var i = 1; i <= 4; i++) filename[i] = RegExp(source['Name'] + '_' + i + '.jpg');
+                    filename[5] = RegExp(source['Name'] + '.jpg');
+                } else {
+                    for (var i = 0; i <= 5; i++) filename[i] = RegExp(source['Name'].split('_')[1] + '_0' + i);
+                }
+            }
             JSZipUtils.getBinaryContent(zipPath, function (error, data) {
                 if (error) {
                     throw error;
                 }
                 JSZip.loadAsync(data).then(function (zip) {
                     var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
-                    zip.file(filename[0]).async("arraybuffer").then(function (data0) {
+                    zip.file(filename[0])[0].async("arraybuffer").then(function (data0) {
                         imgBlob0 = new Blob([data0]);
                         app.question.push(window.URL.createObjectURL(imgBlob0));
-                        zip.file(filename[randomChoice[0]]).async("arraybuffer").then(function (data1) {
+                        zip.file(filename[randomChoice[0]])[0].async("arraybuffer").then(function (data1) {
                             imgBlob1 = new Blob([data1]);
                             app.choice[1].push(window.URL.createObjectURL(imgBlob1));
-                            zip.file(filename[randomChoice[1]]).async("arraybuffer").then(function (data2) {
+                            zip.file(filename[randomChoice[1]])[0].async("arraybuffer").then(function (data2) {
                                 imgBlob2 = new Blob([data2]);
                                 app.choice[2].push(window.URL.createObjectURL(imgBlob2));
-                                zip.file(filename[randomChoice[2]]).async("arraybuffer").then(function (data3) {
+                                zip.file(filename[randomChoice[2]])[0].async("arraybuffer").then(function (data3) {
                                     imgBlob3 = new Blob([data3]);
                                     app.choice[3].push(window.URL.createObjectURL(imgBlob3));
-                                    zip.file(filename[randomChoice[3]]).async("arraybuffer").then(function (data4) {
+                                    zip.file(filename[randomChoice[3]])[0].async("arraybuffer").then(function (data4) {
                                         imgBlob4 = new Blob([data4]);
                                         app.choice[4].push(window.URL.createObjectURL(imgBlob4));
-                                        zip.file(filename[5]).async("arraybuffer").then(function (data5) {
+                                        zip.file(filename[5])[0].async("arraybuffer").then(function (data5) {
                                             imgBlob5 = new Blob([data5]);
                                             app.answer.push(window.URL.createObjectURL(imgBlob5));
                                             resolve(q);
@@ -126,7 +136,8 @@
         }).then(function () {
             app.questions.push(data[q]);
             if (q < data.length - 1) insQuestion(q + 1, data);
-            else {
+            if (q == 0) {
+                app.fullscreenLoading = false;
                 countdownStart();
             }
         });
@@ -169,7 +180,6 @@
                     console.log(response);
                     return;
                 }
-                app.fullscreenLoading = false;
                 app.choose = new Array(response.data.length + 1);
                 insQuestion(0, response.data);
             }).catch(function (error) {
