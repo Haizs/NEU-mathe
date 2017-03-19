@@ -23,7 +23,7 @@
         </div>
     </div>
 </header>
-<div id="container">
+<div id="container" class="wrap">
     <div id="type">
         <el-radio-group v-model='radioType' size='large'>
             <el-radio-button v-for="type in types" size='large' :label="type.name" :key="type.id"></el-radio-button>
@@ -70,8 +70,8 @@
                                     <el-input v-model="customTemplate" type="textarea" :rows="3"
                                               placeholder="*_*_*_*"></el-input>
                                 </el-form-item>
-                                <el-form-item label="自选题目" name="problem">
-                                    <el-input v-model="customProblem" type="textarea" :rows="3"
+                                <el-form-item label="自选题目" name="source">
+                                    <el-input v-model="customSource" type="textarea" :rows="3"
                                               placeholder="*.zip"></el-input>
                                 </el-form-item>
                             </el-form>
@@ -141,7 +141,7 @@
             eCount: 0,
             eTime: 0,
             customTemplate: '',
-            customProblem: '',
+            customSource: '',
             cancelButton: '取消'
         },
         computed: {
@@ -162,7 +162,7 @@
                 this.eTime = 90;
                 this.eCount = 25;
                 this.customTemplate = '';
-                this.customProblem = '';
+                this.customSource = '';
                 this.dialogTab = 'selection';
                 this.dialogVisible = true;
                 if (this.radioType == this.types[0].name) {
@@ -189,13 +189,13 @@
                 url += '?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
                 url += '&subject=' + this.selectedSubject.id;
                 if (this.radioType == this.types[0].name) {
-                    url += '&id=' + this.$refs.tree.getCheckedKeys().toString();
+                    url += '&id=' + this.$refs.tree.getCheckedKeys(true).toString();
                     if (this.zenMode) url += '&zen=1';
                     else url += '&count=' + this.eCount + '&time=' + this.eTime;
                 } else {
                     url += '&time=' + this.eTime;
                     url += '&template=' + this.customTemplate;
-                    url += '&problem=' + this.customProblem;
+                    url += '&source=' + this.customSource;
                 }
                 window.location.href = url;
             }

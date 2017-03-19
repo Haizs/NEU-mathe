@@ -29,6 +29,12 @@ body {
     z-index: 9;
 }
 
+.progress {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
 #site-title {
     color: #38b7ea;
     float: left;
@@ -46,9 +52,9 @@ body {
 
 #container {
     position: relative;
-    max-width: 960px;
     min-height: 390px;
     margin: 0 auto;
+    width: 100%;
     flex: 1;
     -webkit-flex: 1;
     display: flex;
@@ -99,4 +105,57 @@ footer {
 #copyright {
     color: #828282;
     font-size: 12px;
+}
+
+.question {
+    margin: 15px 11px 0 11px;
+}
+
+.question-title {
+    margin: 11px 0 5px 0;
+    font-size: 1.25rem;
+}
+
+.question-choice {
+    margin: 0 !important;
+}
+
+.choice-correct {
+    background-color: #CCFF66;
+}
+
+.choice-wrong {
+    background-color: #FF6666;
+}
+
+.question-answer {
+    padding: .5rem;
+    text-align: center;
+}
+
+.question .el-col {
+    padding: .5rem 0 .5rem 1rem;
+    margin-top: -1px;
+    border: 1px solid #ddd;
+}
+
+.question img {
+    max-width: 100%;
+}
+
+.question span {
+    display: table-cell;
+}
+
+.el-card__header {
+    padding: 0;
+    text-align: center;
+}
+
+.el-card__body {
+    padding: 0;
+}
+
+.submit {
+    margin: 20px 11px;
 }
