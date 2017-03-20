@@ -26,7 +26,6 @@ body {
     height: 42px;
     width: 100%;
     overflow: hidden;
-    z-index: 9;
 }
 
 .progress {
@@ -72,6 +71,10 @@ body {
 
 #avatar img {
     border-radius: 50%;
+}
+
+.login-panel {
+    max-width: 420px;
 }
 
 #type {
