@@ -73,7 +73,7 @@ body {
     border-radius: 50%;
 }
 
-.login-panel {
+.login-panel, .register-panel {
     max-width: 420px;
 }
 

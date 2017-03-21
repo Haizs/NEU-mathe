@@ -13,13 +13,10 @@
 <body>
 <header id="header" class="header">
     <el-popover ref="popover" placement="bottom" v-model="userInfo">
-        <div :style="{'text-align': 'center'}">
-            <p v-if="hasLogin" v-text="'Hello, '+username+'!'"></p>
-            <template v-if="!hasLogin">
-                <p v-text="'Hello, Guest!'"></p>
-                <el-button type="primary" size="mini" @click="userInfo=false;isRegister=false;loginPanel=true;"
-                           v-text="'Login'"></el-button>
-            </template>
+        <div :style="{'text-align': 'center','font-size':'16px'}">
+            <p v-text="'Hello, '+username+'!'"></p>
+            <el-button v-if="!isLogin" type="info" size="mini"
+                       @click="userInfo=false;isRegister=false;loginPanel=true;" v-text="'Login'"></el-button>
         </div>
     </el-popover>
     <div class="wrap">
@@ -29,42 +26,41 @@
             </div>
         </div>
         <div id="avatar">
-            <img style="cursor:pointer;" :src="'getGravatar.php?'+gravatar" v-popover:popover>
+            <img style="cursor:pointer;" :src="gravatarURL" v-popover:popover>
         </div>
     </div>
     <el-dialog :title="isRegister?'注册':'登录'" v-model="loginPanel" size="large" :lock-scroll="true"
                custom-class="login-panel">
-        <el-form :model="form" label-width="80px">
-            <template v-if="isRegister">
-                <el-form-item label="邮箱">
-                    <el-input v-model="form.email"></el-input>
-                </el-form-item>
-                <el-form-item label="昵称">
-                    <el-input v-model="form.nickname"></el-input>
-                </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码">
-                    <el-input v-model="form.checkPassword"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="register">注册</el-button>
-                    <el-button @click="isRegister=false">登录</el-button>
-                </el-form-item>
-            </template>
-            <template v-else>
-                <el-form-item label="邮箱">
-                    <el-input v-model="form.email"></el-input>
-                </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="login">登录</el-button>
-                    <el-button @click="isRegister=true">注册</el-button>
-                </el-form-item>
-            </template>
+        <el-form v-if="isRegister" ref="registerForm" :model="registerForm" :rules="registerFormCheck"
+                 label-width="88px">
+            <el-form-item label="邮箱" prop="email" key="register-email">
+                <el-input v-model="registerForm.email"></el-input>
+            </el-form-item>
+            <el-form-item label="昵称" prop="nickname" key="register-nickname">
+                <el-input v-model="registerForm.nickname"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password" key="register-password">
+                <el-input v-model="registerForm.password" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="passwordCheck" key="register-passwordCheck">
+                <el-input v-model="registerForm.passwordCheck" type="password"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="register()">注册</el-button>
+                <el-button @click="toLogin()">登录</el-button>
+            </el-form-item>
+        </el-form>
+        <el-form v-else ref="loginForm" :model="loginForm" :rules="loginFormCheck" label-width="88px">
+            <el-form-item label="邮箱" prop="email" key="login-email">
+                <el-input v-model="loginForm.email"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password" key="login-password">
+                <el-input v-model="loginForm.password" type="password"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="login()">登录</el-button>
+                <el-button @click="toRegister()">注册</el-button>
+            </el-form-item>
         </el-form>
     </el-dialog>
 </header>
@@ -156,22 +152,137 @@
     var header = new Vue({
         el: '#header',
         data: {
-            gravatar: 'hash=&s=32',
+            gravatarURL: '',
             userInfo: false,
-            hasLogin: false,
+            username: '',
+            isLogin: false,
             loginPanel: false,
             isRegister: false,
-            form: {
+            loginForm: {
                 email: '',
                 password: ''
+            },
+            registerForm: {
+                email: '',
+                nickname: '',
+                password: '',
+                passwordCheck: ''
+            },
+            registerFormCheck: {
+                email: [
+                    {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    {pattern: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/, message: '请输入正确的邮箱', trigger: 'blur'}
+                ],
+                nickname: [
+                    {required: true, message: '请输入昵称', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9]{5,15}$/, message: '请输入至少五位英文或数字昵称', trigger: 'blur'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {pattern: /^[!-~]{6,}$/, message: '请输入至少六位密码', trigger: 'blur'}
+                ],
+                passwordCheck: [
+                    {required: true, message: '请再次输入密码', trigger: 'blur'},
+                    {
+                        validator: function (rule, value, callback) {
+                            if (value !== header.registerForm.password) {
+                                callback(new Error('两次输入密码不一致!'));
+                            } else {
+                                callback();
+                            }
+                        }, trigger: 'blur'
+                    }
+                ]
+            },
+            loginFormCheck: {
+                email: [
+                    {required: true, message: '请输入邮箱', trigger: 'blur'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'}
+                ]
             }
         },
+        created: function () {
+            axios.get('userInfo.php', {}
+            ).then(function (response) {
+                if (response.status != 200) {
+                    header.$message.error('请求出错');
+                    return;
+                }
+                var data = response.data;
+                if (data.isLogin) {
+                    header.gravatarURL = 'getGravatar.php?hash=' + data.hash + '&s=32';
+                    header.isLogin = true;
+                    header.username = data.nickname;
+                } else {
+                    header.gravatarURL = 'getGravatar.php?hash=' + '&s=32';
+                    header.isLogin = false;
+                    header.username = 'Guest';
+                }
+            }).catch(function (error) {
+                header.$message.error('网络错误');
+            })
+        },
         methods: {
+            toRegister: function () {
+                this.$refs['loginForm'].resetFields();
+                this.isRegister = true;
+            },
+            toLogin: function () {
+                this.$refs['registerForm'].resetFields();
+                this.isRegister = false;
+            },
             register: function () {
-
+                this.$refs['registerForm'].validate(function (valid) {
+                    if (valid) {
+                        axios.get('userRegister.php', {
+                            params: {
+                                email: header.registerForm.email,
+                                nickname: header.registerForm.nickname,
+                                password: header.registerForm.password
+                            }
+                        }).then(function (response) {
+                            if (response.status != 200) {
+                                header.$message.error('请求出错');
+                                return;
+                            }
+                            window.location.reload();
+                        }).catch(function (error) {
+                            header.$message.error('网络错误');
+                        });
+                    } else {
+                        console.log('failed');
+                    }
+                })
             },
             login: function () {
-
+                this.$refs['loginForm'].validate(function (valid) {
+                    if (valid) {
+                        axios.get('userLogin.php', {
+                            params: {
+                                email: header.loginForm.email,
+                                password: header.loginForm.password
+                            }
+                        }).then(function (response) {
+                            if (response.status != 200) {
+                                header.$message.error('请求出错');
+                                return;
+                            }
+                            var data = response.data;
+                            console.log(data);
+                            if (data.error) {
+                                header.$message.error(data.message);
+                            } else {
+                                window.location.reload();
+                            }
+                        }).catch(function (error) {
+                            header.$message.error('网络错误');
+                        });
+                    } else {
+                        console.log('failed');
+                    }
+                })
             }
         }
     });
