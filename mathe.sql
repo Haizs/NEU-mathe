@@ -8446,6 +8446,21 @@ INSERT INTO `GS_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `user`
+--
+
+CREATE TABLE `user` (
+  `email`    VARCHAR(255) NOT NULL,
+  `nickname` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `salt`     VARCHAR(255) NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `XD_Chapter`
 --
 

@@ -1,8 +1,8 @@
 <?php
-if (!isset($_GET['email']) || !preg_match("/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/i", $_GET['email'])
-    || !isset($_GET['password']) || !preg_match("/^[!-~]{6,}$/i", $_GET['password'])
+if (!isset($_POST['email']) || !preg_match("/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/i", $_POST['email'])
+    || !isset($_POST['password']) || !preg_match("/^[!-~]{6,}$/i", $_POST['password'])
 ) {
-    http_response_code(400);
+    echo(json_encode(array('error' => true, 'message' => '验证失败')));
     die();
 }
 require_once('config.php');
@@ -11,15 +11,15 @@ try {
     $dbh = new PDO($dsn, $user, $pass);
     $sth = $dbh->prepare($sql);
     $sth->setFetchMode(PDO::FETCH_ASSOC);
-    $sth->execute(array($_GET['email']));
+    $sth->execute(array($_POST['email']));
     $row = $sth->fetch();
 } catch (PDOException $e) {
     http_response_code(500);
     die();
 }
-if ($row['password'] == crypt($_GET['password'], $row['salt'])) {
+if ($row['password'] == crypt($_POST['password'], $row['salt'])) {
     $arr = array('error' => false, 'nickname' => $row['nickname']);
-    setcookie('username', $_GET['email'], time() + 2592000);
+    setcookie('username', $_POST['email'], time() + 2592000);
     setcookie('user_token', md5(crypt($row['password'], $row['salt'])), time() + 2592000);
 } elseif (is_array($row)) {
     $arr = array('error' => true, 'message' => '密码错误');

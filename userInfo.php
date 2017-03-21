@@ -1,5 +1,7 @@
 <?php
 if (!isset($_COOKIE['username']) || !isset($_COOKIE['user_token'])) {
+    setcookie('username', '', time() - 3600);
+    setcookie('user_token', '', time() - 3600);
     die();
 }
 require_once('config.php');
