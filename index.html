@@ -21,9 +21,7 @@
     </el-popover>
     <div class="wrap">
         <div id="logo">
-            <div id="site-title">
-                NEU-Mathe
-            </div>
+            <div id="site-title" v-text="'NEU-Mathe'"></div>
         </div>
         <div id="avatar">
             <img style="cursor:pointer;" :src="gravatarURL" v-popover:popover>
@@ -46,8 +44,8 @@
                 <el-input v-model="registerForm.passwordCheck" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="register()">注册</el-button>
-                <el-button @click="toLogin()">登录</el-button>
+                <el-button type="primary" @click="register()" v-text="'注册'"></el-button>
+                <el-button @click="toLogin()" v-text="'登录'"></el-button>
             </el-form-item>
         </el-form>
         <el-form v-else ref="loginForm" :model="loginForm" :rules="loginFormCheck" label-width="88px">
@@ -58,8 +56,8 @@
                 <el-input v-model="loginForm.password" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="login()">登录</el-button>
-                <el-button @click="toRegister()">注册</el-button>
+                <el-button type="primary" @click="login()" v-text="'登录'"></el-button>
+                <el-button @click="toRegister()" v-text="'注册'"></el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
