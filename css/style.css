@@ -65,12 +65,18 @@ body {
 }
 
 #avatar {
+    position: relative;
     float: right;
     padding: 5px 27px;
+    height: 32px;
 }
 
 #avatar img {
     border-radius: 50%;
+}
+
+#avatar .el-loading-mask {
+    margin-left: -27px;
 }
 
 .login-panel, .register-panel {

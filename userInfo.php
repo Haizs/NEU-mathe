@@ -8,7 +8,7 @@ try {
     $dbh = new PDO($dsn, $user, $pass);
     $sth = $dbh->prepare($sql);
     $sth->setFetchMode(PDO::FETCH_ASSOC);
-    $sth->execute(array($_COOKIE['username']));
+    $sth->execute(array(strtolower($_COOKIE['username'])));
     $row = $sth->fetch();
 } catch (PDOException $e) {
     http_response_code(500);

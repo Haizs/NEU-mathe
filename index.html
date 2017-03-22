@@ -23,14 +23,14 @@
         <div id="logo">
             <div id="site-title" v-text="'NEU-Mathe'"></div>
         </div>
-        <div id="avatar">
+        <div id="avatar" v-loading="loadingInfo">
             <img style="cursor:pointer;" :src="gravatarURL" v-popover:popover>
         </div>
     </div>
     <el-dialog :title="isRegister?'注册':'登录'" v-model="loginPanel" size="large" :lock-scroll="true"
                custom-class="login-panel">
         <el-form v-if="isRegister" ref="registerForm" :model="registerForm" :rules="registerFormCheck"
-                 label-width="88px">
+                 label-width="88px" v-loading="loadingRegister">
             <el-form-item label="邮箱" prop="email" key="register-email">
                 <el-input v-model="registerForm.email"></el-input>
             </el-form-item>
@@ -48,7 +48,8 @@
                 <el-button @click="toLogin()" v-text="'登录'"></el-button>
             </el-form-item>
         </el-form>
-        <el-form v-else ref="loginForm" :model="loginForm" :rules="loginFormCheck" label-width="88px">
+        <el-form v-else ref="loginForm" :model="loginForm" :rules="loginFormCheck" label-width="88px"
+                 v-loading="loadingLogin">
             <el-form-item label="邮箱" prop="email" key="login-email">
                 <el-input v-model="loginForm.email"></el-input>
             </el-form-item>
@@ -156,6 +157,9 @@
             isLogin: false,
             loginPanel: false,
             isRegister: false,
+            loadingInfo: false,
+            loadingLogin: false,
+            loadingRegister: false,
             loginForm: {
                 email: '',
                 password: ''
@@ -202,8 +206,10 @@
             }
         },
         created: function () {
+            this.loadingInfo = true;
             axios.get('userInfo.php', {}
             ).then(function (response) {
+                header.loadingInfo = false;
                 if (response.status != 200) {
                     header.$message.error('请求出错');
                     return;
@@ -219,6 +225,7 @@
                     header.username = 'Guest';
                 }
             }).catch(function (error) {
+                header.loadingInfo = false;
                 header.$message.error('网络错误');
             })
         },
@@ -234,27 +241,29 @@
             register: function () {
                 this.$refs['registerForm'].validate(function (valid) {
                     if (valid) {
+                        header.loadingRegister = true;
                         axios.post('userRegister.php', {
                             email: header.registerForm.email,
                             nickname: header.registerForm.nickname,
                             password: header.registerForm.password
                         }).then(function (response) {
+                            header.loadingRegister = false;
                             if (response.status != 200) {
                                 header.$message.error('请求出错');
                                 return;
                             }
                             window.location.reload();
                         }).catch(function (error) {
+                            header.loadingRegister = false;
                             header.$message.error('网络错误');
                         });
-                    } else {
-                        console.log('failed');
                     }
                 })
             },
             login: function () {
                 this.$refs['loginForm'].validate(function (valid) {
                     if (valid) {
+                        header.loadingLogin = true;
                         axios.post('userLogin.php', {
                             email: header.loginForm.email,
                             password: header.loginForm.password
@@ -270,10 +279,9 @@
                                 window.location.reload();
                             }
                         }).catch(function (error) {
+                            header.loadingLogin = false;
                             header.$message.error('网络错误');
                         });
-                    } else {
-                        console.log('failed');
                     }
                 })
             }
