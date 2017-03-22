@@ -106,8 +106,8 @@
             }
             JSZipUtils.getBinaryContent(zipPath, function (error, data) {
                 if (error) {
+                    app.fullscreenLoading = false;
                     app.$message.error('无法加载题目');
-                    resolve(q);
                     return;
                 }
                 JSZip.loadAsync(data).then(function (zip) {
@@ -139,6 +139,10 @@
                     });
                 });
             });
+        }).catch(function (error) {
+            app.fullscreenLoading = false;
+            app.$message.error('无法加载题目');
+            return;
         }).then(function () {
             app.questions.push(data[q]);
             if (q < data.length - 1) insQuestion(q + 1, data);
@@ -182,6 +186,14 @@
         },
         computed: {},
         created: function () {
+            if (this.subject == 'XD' && this.eId.split(',').length > 1 && this.eId.indexOf('8') > -1) {
+                this.fullscreenLoading = false;
+                this.$message.error('期末考试不能与其他一起选择哦');
+                setTimeout(function () {
+                    history.back();
+                }, 3000)
+                return;
+            }
             axios.get('getQuestion.php' + window.location.search, {}).then(function (response) {
                 if (response.status !== 200) {
                     console.log(response);

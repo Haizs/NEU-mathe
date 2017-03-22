@@ -26,12 +26,24 @@ if (!hasGET('subject') || (!hasGET('id') && !hasGET('template') && !hasGET('sour
 }
 require_once('config.php');
 if (hasGET('source')) {
-    $source = explode(',', $_GET['source']);
-    print_r(json_encode($source));
+    $source = explode(',', trim(trim($_GET['source']), ','));
+    foreach ($source as &$name) {
+        $name = str_replace('.zip', '', $name);
+    }
+    $sql = 'SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE Name IN (' . str_repeat('?,', count($source) - 1) . '?)';
+    echo(sqlQuery($sql, $source));
 } else if (hasGET('template')) {
-
+    $template = explode(',', trim(trim($_GET['template']), ','));
+    $sql = '';
+    $arr = array();
+    foreach ($template as $tmp) {
+        $t = explode('_', $tmp);
+        $sql .= 'UNION ( SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE KnowledgeId=? AND Type=? ORDER BY rand() LIMIT ' . (string)intval($t[2]) . ' ) ';
+        $arr = array_merge($arr, array($t[0], $t[1]));
+    }
+    echo(sqlQuery(trim(trim($sql), 'UNION'), $arr));
 } else if (hasGET('id')) {
     $ids = array_map('intval', explode(',', $_GET['id']));
-    $sql = 'SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE KnowledgeId IN (' . str_repeat('?,', count($ids) - 1) . '?) ORDER BY rand() LIMIT ' . (string)intval($_GET['count']);
-    print_r(sqlQuery($sql, $ids));
+    $sql = 'SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE KnowledgeId IN(' . str_repeat(' ?,', count($ids) - 1) . ' ?) ORDER BY rand() LIMIT ' . (string)intval($_GET['count']);
+    echo(sqlQuery($sql, $ids));
 }

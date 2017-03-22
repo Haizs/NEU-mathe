@@ -402,8 +402,12 @@
                 }
             },
             showPaper: function () {
-                if (this.selectedSubject.id == 'XD' && this.$refs.tree.getCheckedKeys(true).length > 1 && this.$refs.tree.getCheckedKeys(true).toString().indexOf('8')) {
+                if (this.selectedSubject.id == 'XD' && this.$refs.tree.getCheckedKeys(true).length > 1 && this.$refs.tree.getCheckedKeys(true).toString().indexOf('8') > -1) {
                     this.$message.warning('期末考试不能与其他一起选择哦');
+                    return;
+                }
+                if (this.radioType == this.types[0].name && !this.$refs.tree.getCheckedKeys(true).length) {
+                    this.$message.warning('还没有选择知识点呢');
                     return;
                 }
                 var url = 'paper.html';
