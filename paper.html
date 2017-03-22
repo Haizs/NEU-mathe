@@ -42,8 +42,12 @@
             </el-card>
         </div>
     </template>
-    <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Submit'"></el-button>
-    <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage" v-text="'Retry'"></el-button>
+    <el-alert style="margin-top: 42px;" v-if="networkError" title="网络错误" type="error" description="无法加载，请重试" show-icon
+              :closable="false"></el-alert>
+    <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Submit'"
+               :disabled="networkError"></el-button>
+    <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage" v-text="'Retry'"
+               :disabled="networkError"></el-button>
 </div>
 <footer id="footer">
     <div class="wrap">
@@ -102,7 +106,9 @@
             }
             JSZipUtils.getBinaryContent(zipPath, function (error, data) {
                 if (error) {
-                    throw error;
+                    app.$message.error('无法加载题目');
+                    resolve(q);
+                    return;
                 }
                 JSZip.loadAsync(data).then(function (zip) {
                     var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
@@ -140,7 +146,7 @@
                 app.fullscreenLoading = false;
                 countdownStart();
             }
-        });
+        })
     }
     var header = new Vue({
         el: '#header',
@@ -157,6 +163,7 @@
         el: '#container',
         data: {
             fullscreenLoading: true,
+            networkError: false,
             eType: getUrlParam('type'),
             subject: getUrlParam('subject'),
             eId: getUrlParam('id'),
@@ -183,7 +190,8 @@
                 app.choose = new Array(response.data.length + 1);
                 insQuestion(0, response.data);
             }).catch(function (error) {
-                console.log(error);
+                app.fullscreenLoading = false;
+                app.networkError = true;
             })
         },
         methods: {

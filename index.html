@@ -402,6 +402,10 @@
                 }
             },
             showPaper: function () {
+                if (this.selectedSubject.id == 'XD' && this.$refs.tree.getCheckedKeys(true).length > 1 && this.$refs.tree.getCheckedKeys(true).toString().indexOf('8')) {
+                    this.$message.warning('期末考试不能与其他一起选择哦');
+                    return;
+                }
                 var url = 'paper.html';
                 url += '?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
                 url += '&subject=' + this.selectedSubject.id;
