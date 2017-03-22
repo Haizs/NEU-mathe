@@ -18,9 +18,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `FB_Chapter` (
-  `Id`   INT(2)      DEFAULT NULL,
-  `Pid`  INT(2)      DEFAULT NULL,
-  `Name` VARCHAR(19) DEFAULT NULL
+  `Id`   INT(2)       DEFAULT NULL,
+  `Pid`  INT(2)       DEFAULT NULL,
+  `Name` VARCHAR(255) DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -71,12 +71,12 @@ INSERT INTO `FB_Chapter` (`Id`, `Pid`, `Name`) VALUES
 --
 
 CREATE TABLE `FB_ChoiceTable` (
-  `Id`          INT(4)      DEFAULT NULL,
-  `KnowledgeId` INT(2)      DEFAULT NULL,
-  `Type`        INT(1)      DEFAULT NULL,
-  `Src`         VARCHAR(19) DEFAULT NULL,
-  `Name`        VARCHAR(46) DEFAULT NULL,
-  `Count`       INT(1)      DEFAULT NULL
+  `Id`          INT(4)       DEFAULT NULL,
+  `KnowledgeId` INT(2)       DEFAULT NULL,
+  `Type`        INT(1)       DEFAULT NULL,
+  `Src`         VARCHAR(255) DEFAULT NULL,
+  `Name`        VARCHAR(255) DEFAULT NULL,
+  `Count`       INT(1)       DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -1443,9 +1443,9 @@ INSERT INTO `FB_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
 --
 
 CREATE TABLE `GL_Chapter` (
-  `Id`   INT(3)      DEFAULT NULL,
-  `Pid`  INT(3)      DEFAULT NULL,
-  `Name` VARCHAR(27) DEFAULT NULL
+  `Id`   INT(3)       DEFAULT NULL,
+  `Pid`  INT(3)       DEFAULT NULL,
+  `Name` VARCHAR(255) DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -1667,12 +1667,12 @@ INSERT INTO `GL_Chapter` (`Id`, `Pid`, `Name`) VALUES
 --
 
 CREATE TABLE `GL_ChoiceTable` (
-  `Id`          INT(4)      DEFAULT NULL,
-  `KnowledgeId` INT(3)      DEFAULT NULL,
-  `Type`        INT(1)      DEFAULT NULL,
-  `Src`         VARCHAR(20) DEFAULT NULL,
-  `Name`        VARCHAR(47) DEFAULT NULL,
-  `Count`       INT(1)      DEFAULT NULL
+  `Id`          INT(4)       DEFAULT NULL,
+  `KnowledgeId` INT(3)       DEFAULT NULL,
+  `Type`        INT(1)       DEFAULT NULL,
+  `Src`         VARCHAR(255) DEFAULT NULL,
+  `Name`        VARCHAR(255) DEFAULT NULL,
+  `Count`       INT(1)       DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -3291,9 +3291,9 @@ INSERT INTO `GL_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
 --
 
 CREATE TABLE `GS_Chapter` (
-  `Id`   INT(3)      DEFAULT NULL,
-  `Pid`  INT(3)      DEFAULT NULL,
-  `Name` VARCHAR(24) DEFAULT NULL
+  `Id`   INT(3)       DEFAULT NULL,
+  `Pid`  INT(3)       DEFAULT NULL,
+  `Name` VARCHAR(255) DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -3578,12 +3578,12 @@ INSERT INTO `GS_Chapter` (`Id`, `Pid`, `Name`) VALUES
 --
 
 CREATE TABLE `GS_ChoiceTable` (
-  `Id`          INT(4)      DEFAULT NULL,
-  `KnowledgeId` INT(3)      DEFAULT NULL,
-  `Type`        INT(1)      DEFAULT NULL,
-  `Src`         VARCHAR(20) DEFAULT NULL,
-  `Name`        VARCHAR(47) DEFAULT NULL,
-  `Count`       INT(1)      DEFAULT NULL
+  `Id`          INT(4)       DEFAULT NULL,
+  `KnowledgeId` INT(3)       DEFAULT NULL,
+  `Type`        INT(1)       DEFAULT NULL,
+  `Src`         VARCHAR(255) DEFAULT NULL,
+  `Name`        VARCHAR(255) DEFAULT NULL,
+  `Count`       INT(1)       DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -8452,8 +8452,7 @@ INSERT INTO `GS_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
 CREATE TABLE `user` (
   `email`    VARCHAR(255) NOT NULL,
   `nickname` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `salt`     VARCHAR(255) NOT NULL
+  `password` VARCHAR(255) NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -8465,9 +8464,9 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `XD_Chapter` (
-  `Id`   INT(1)      DEFAULT NULL,
-  `Pid`  INT(1)      DEFAULT NULL,
-  `Name` VARCHAR(13) DEFAULT NULL
+  `Id`   INT(1)       DEFAULT NULL,
+  `Pid`  INT(1)       DEFAULT NULL,
+  `Name` VARCHAR(255) DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -8493,12 +8492,12 @@ INSERT INTO `XD_Chapter` (`Id`, `Pid`, `Name`) VALUES
 --
 
 CREATE TABLE `XD_ChoiceTable` (
-  `id`          INT(4)      DEFAULT NULL,
-  `KnowledgeId` INT(1)      DEFAULT NULL,
-  `Type`        INT(1)      DEFAULT NULL,
-  `Src`         VARCHAR(32) DEFAULT NULL,
-  `Name`        VARCHAR(15) DEFAULT NULL,
-  `Count`       INT(1)      DEFAULT NULL
+  `id`          INT(4)       DEFAULT NULL,
+  `KnowledgeId` INT(1)       DEFAULT NULL,
+  `Type`        INT(1)       DEFAULT NULL,
+  `Src`         VARCHAR(255) DEFAULT NULL,
+  `Name`        VARCHAR(255) DEFAULT NULL,
+  `Count`       INT(1)       DEFAULT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

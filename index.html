@@ -290,6 +290,7 @@
                             email: header.loginForm.email,
                             password: header.loginForm.password
                         }).then(function (response) {
+                            header.loadingLogin = false;
                             if (response.status != 200) {
                                 header.$message.error('请求出错');
                                 return;
