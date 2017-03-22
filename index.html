@@ -175,7 +175,27 @@
             registerFormCheck: {
                 email: [
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
-                    {pattern: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/, message: '请输入正确的邮箱', trigger: 'blur'}
+                    {pattern: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/, message: '请输入正确的邮箱', trigger: 'blur'},
+                    {
+                        validator: function (rule, value, callback) {
+                            axios.post('userCheck.php', {
+                                email: value
+                            }).then(function (response) {
+                                if (response.status != 200) {
+                                    callback(new Error('请求错误'));
+                                    return;
+                                }
+                                var data = response.data;
+                                if (data.isRegister) {
+                                    callback(new Error('邮箱已注册'));
+                                    return;
+                                }
+                                callback();
+                            }).catch(function (error) {
+                                callback(new Error('网络错误'))
+                            })
+                        }, trigger: 'blur'
+                    }
                 ],
                 nickname: [
                     {required: true, message: '请输入昵称', trigger: 'blur'},
