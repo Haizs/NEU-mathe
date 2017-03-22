@@ -12,16 +12,17 @@ function createSalt($pass)
     return $salt;
 }
 
-if (!isset($_POST['email']) || !preg_match("/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/i", $_POST['email'])
-    || !isset($_POST['nickname']) || !preg_match("/^[a-zA-Z0-9]{5,15}$/i", $_POST['nickname'])
-    || !isset($_POST['password']) || !preg_match("/^[!-~]{6,}$/i", $_POST['password'])
+$input = json_decode(file_get_contents('php://input'), true);
+if (!isset($input['email']) || !preg_match("/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/i", $input['email'])
+    || !isset($input['nickname']) || !preg_match("/^[a-zA-Z0-9]{5,15}$/i", $input['nickname'])
+    || !isset($input['password']) || !preg_match("/^[!-~]{6,}$/i", $input['password'])
 ) {
     http_response_code(400);
     die();
 }
 require_once('config.php');
-$salt = createSalt($_POST['password']);
-$arr = array($_POST['email'], $_POST['nickname'], crypt($_POST['password'], $salt), $salt);
+$salt = createSalt($input['password']);
+$arr = array($input['email'], $input['nickname'], crypt($input['password'], $salt), $salt);
 try {
     $sql = 'INSERT INTO user VALUES (?,?,?,?)';
     $dbh = new PDO($dsn, $user, $pass);

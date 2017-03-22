@@ -234,12 +234,11 @@
             register: function () {
                 this.$refs['registerForm'].validate(function (valid) {
                     if (valid) {
-                        var params = new URLSearchParams();
-                        params.append('email', header.registerForm.email);
-                        params.append('nickname', header.registerForm.nickname);
-                        params.append('password', header.registerForm.password);
-                        axios.post('userRegister.php', params
-                        ).then(function (response) {
+                        axios.post('userRegister.php', {
+                            email: header.registerForm.email,
+                            nickname: header.registerForm.nickname,
+                            password: header.registerForm.password
+                        }).then(function (response) {
                             if (response.status != 200) {
                                 header.$message.error('请求出错');
                                 return;
@@ -256,17 +255,15 @@
             login: function () {
                 this.$refs['loginForm'].validate(function (valid) {
                     if (valid) {
-                        var params = new URLSearchParams();
-                        params.append('email', header.loginForm.email);
-                        params.append('password', header.loginForm.password);
-                        axios.post('userLogin.php', params
-                        ).then(function (response) {
+                        axios.post('userLogin.php', {
+                            email: header.loginForm.email,
+                            password: header.loginForm.password
+                        }).then(function (response) {
                             if (response.status != 200) {
                                 header.$message.error('请求出错');
                                 return;
                             }
                             var data = response.data;
-                            console.log(data);
                             if (data.error) {
                                 header.$message.error(data.message);
                             } else {
