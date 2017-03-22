@@ -14,9 +14,11 @@
 <header id="header" class="header">
     <el-popover ref="popover" placement="bottom" v-model="userInfo">
         <div :style="{'text-align': 'center','font-size':'16px'}">
-            <p v-text="'Hello, '+username+'!'"></p>
+            <p v-text="'Hello, '+username+' !'"></p>
             <el-button v-if="!isLogin" type="info" size="mini"
                        @click="userInfo=false;isRegister=false;loginPanel=true;" v-text="'Login'"></el-button>
+            <el-button v-if="isLogin" type="info" size="mini"
+                       @click="logout()" v-text="'Logout'"></el-button>
         </div>
     </el-popover>
     <div class="wrap">
@@ -284,6 +286,18 @@
                         });
                     }
                 })
+            },
+            logout: function () {
+                axios.get('userLogout.php'
+                ).then(function (response) {
+                    if (response.status != 200) {
+                        header.$message.error('请求出错');
+                        return;
+                    }
+                    window.location.reload();
+                }).catch(function (error) {
+                    header.$message.error('网络错误');
+                });
             }
         }
     });
