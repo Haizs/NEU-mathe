@@ -14,40 +14,62 @@
 <header id="header" class="progress">
     <el-progress v-if="showCountdown" :percentage="countdown" status="exception" :show-text="false"
                  :stroke-width="9"></el-progress>
-    <el-progress v-if="showProgress" :percentage="progress" :status="progressStatus" :show-text="false"
-                 :stroke-width="9"></el-progress>
 </header>
 <div id="container" class="wrap" v-loading.fullscreen.lock="fullscreenLoading">
-    <template v-if="zenMode">
-
-    </template>
-    <template v-if="!zenMode">
-        <div class="question" v-for="q in questions.length" :key="q">
-            <el-card>
-                <div slot="header">
-                    <div class="question-title" v-text="'Question '+q"></div>
-                    <img :src="question[q]">
-                </div>
-                <el-row>
-                    <el-col :xs="24" :sm="24" v-for="i in 4" :key="i"
-                            :class="[{'choice-correct': showAnswer && correctChoice[q]==i},{'choice-wrong': showAnswer && correctChoice[q]!=i && (choose[q]==i || !choose[q])}]">
-                        <el-radio v-model="choose[q]" :label="i" :disabled="showAnswer">
-                            <img :src="choice[i][q]">
-                        </el-radio>
-                    </el-col>
-                </el-row>
-                <div class="question-answer" v-if="showAnswer">
-                    <img :src="answer[q]">
-                </div>
-            </el-card>
-        </div>
-    </template>
     <el-alert style="margin-top: 42px;" v-if="networkError" title="网络错误" type="error" description="无法加载，请重试" show-icon
               :closable="false"></el-alert>
-    <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Submit'"
-               :disabled="networkError"></el-button>
-    <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage" v-text="'Retry'"
-               :disabled="networkError"></el-button>
+    <template v-if="zenMode">
+        <el-pagination class="paginationFix" @current-change="zenChange" :current-page="zenCurrent"
+                       layout="prev, pager, next, jumper" :page-size="1" :total="zenTotal">
+        </el-pagination>
+        <el-card class="question">
+            <div slot="header">
+                <div class="question-title" v-text="questionTitleZen"></div>
+                <img :src="questionZen">
+            </div>
+            <el-row>
+                <el-col :xs="24" :sm="24" v-for="i in 4" :key="i"
+                        :class="[{'choice-correct': showAnswer && correctChoiceZen==i},
+                                 {'choice-wrong': showAnswer && correctChoiceZen!=i && (chooseZen==i || !chooseZen)}]">
+                    <el-radio v-model="chooseZen" :label="i" :disabled="showAnswer">
+                        <img :src="choiceZen[i]">
+                    </el-radio>
+                </el-col>
+            </el-row>
+            <div class="question-answer" v-if="showAnswer">
+                <img :src="answerZen">
+            </div>
+        </el-card>
+        <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Check'"
+                   :disabled="networkError"></el-button>
+        <el-button v-if="showAnswer && zenCurrent<zenTotal" class="submit" type="success" @click="zenNext"
+                   v-text="'Next'" :disabled="networkError"></el-button>
+        <el-button v-if="showAnswer && zenCurrent>=zenTotal" class="submit" type="danger" @click="reloadPage"
+                   v-text="'Retry'" :disabled="networkError"></el-button>
+    </template>
+    <template v-if="!zenMode">
+        <el-card class="question" v-for="q in questions.length" :key="q">
+            <div slot="header">
+                <div class="question-title" v-text="'Question '+q"></div>
+                <img :src="question[q]">
+            </div>
+            <el-row>
+                <el-col :xs="24" :sm="24" v-for="i in 4" :key="i"
+                        :class="[{'choice-correct': showAnswer && correctChoice[q]==i},{'choice-wrong': showAnswer && correctChoice[q]!=i && (choose[q]==i || !choose[q])}]">
+                    <el-radio v-model="choose[q]" :label="i" :disabled="showAnswer">
+                        <img :src="choice[i][q]">
+                    </el-radio>
+                </el-col>
+            </el-row>
+            <div class="question-answer" v-if="showAnswer">
+                <img :src="answer[q]">
+            </div>
+        </el-card>
+        <el-button v-if="!showAnswer" class="submit" type="primary" @click="checkAnswer" v-text="'Submit'"
+                   :disabled="networkError"></el-button>
+        <el-button v-if="showAnswer" class="submit" type="danger" @click="reloadPage" v-text="'Retry'"
+                   :disabled="networkError"></el-button>
+    </template>
 </div>
 <footer id="footer">
     <div class="wrap">
@@ -63,47 +85,103 @@
 <script src="js/jszip.min.js"></script>
 <script src="js/jszip-utils.min.js"></script>
 <script>
-    String.prototype.trim = function (Useless) {
-        var regex = eval("/^" + Useless + "*|" + Useless + "*$/g");
-        return this.replace(regex, "");
-    };
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return decodeURI(r[2]);
         return null;
     }
+    function getRandomChoice(total) {
+        var randomChoice = [];
+        for (var i = 0; i < total; i++) randomChoice[i] = i + 1;
+        for (var i = 0; i < total; i++) {
+            var t = parseInt(Math.random() * 10) % total;
+            var tmp = randomChoice[i];
+            randomChoice[i] = randomChoice[t];
+            randomChoice[t] = tmp;
+        }
+        return randomChoice;
+    }
+    function getFileName(sourceName) {
+        var filename = [];
+        if (getUrlParam('subject') != 'XD') {
+            for (var i = 0; i <= 5; i++) filename[i] = RegExp(sourceName + '_' + i);
+        } else {
+            if (getUrlParam('id').indexOf('8') != -1) {
+                filename[0] = RegExp(sourceName + '.jpg');
+                for (var i = 1; i <= 4; i++) filename[i] = RegExp(sourceName + '_' + i + '.jpg');
+                filename[5] = RegExp(sourceName + '.jpg');
+            } else {
+                for (var i = 0; i <= 5; i++) filename[i] = RegExp(sourceName.split('_')[1] + '_0' + i);
+            }
+        }
+        return filename;
+    }
     function countdownStart() {
         header.countdownTime -= 1;
         header.countdown = header.countdownTime * 100 / 60 / getUrlParam('time');
+        if (header.countdownTime <= 0) app.checkAnswer();
         if (header.countdownTime > 0 && app.showAnswer == false) setTimeout(function () {
             countdownStart();
         }, 1000);
+    }
+    function insQuestionZen() {
+        new Promise(function (resolve) {
+            var source = app.questions[app.zenCurrent];
+            var zipPath = 'ChoiceSource' + source['Src'] + source['Name'] + '.zip';
+            var randomChoice = getRandomChoice(4);
+            app.correctChoiceZen = randomChoice.indexOf(1) + 1;
+            var filename = getFileName(source['Name']);
+            app.questionTitleZen = source['Name'];
+            JSZipUtils.getBinaryContent(zipPath, function (error, data) {
+                if (error) {
+                    app.fullscreenLoading = false;
+                    app.$message.error('无法加载题目');
+                    return;
+                }
+                JSZip.loadAsync(data).then(function (zip) {
+                    var imgBlob0, imgBlob1, imgBlob2, imgBlob3, imgBlob4, imgBlob5;
+                    zip.file(filename[0])[0].async("arraybuffer").then(function (data0) {
+                        imgBlob0 = new Blob([data0]);
+                        app.questionZen = (window.URL.createObjectURL(imgBlob0));
+                        zip.file(filename[randomChoice[0]])[0].async("arraybuffer").then(function (data1) {
+                            imgBlob1 = new Blob([data1]);
+                            Vue.set(app.choiceZen, 1, window.URL.createObjectURL(imgBlob1));
+                            zip.file(filename[randomChoice[1]])[0].async("arraybuffer").then(function (data2) {
+                                imgBlob2 = new Blob([data2]);
+                                Vue.set(app.choiceZen, 2, window.URL.createObjectURL(imgBlob2));
+                                zip.file(filename[randomChoice[2]])[0].async("arraybuffer").then(function (data3) {
+                                    imgBlob3 = new Blob([data3]);
+                                    Vue.set(app.choiceZen, 3, window.URL.createObjectURL(imgBlob3));
+                                    zip.file(filename[randomChoice[3]])[0].async("arraybuffer").then(function (data4) {
+                                        imgBlob4 = new Blob([data4]);
+                                        Vue.set(app.choiceZen, 4, window.URL.createObjectURL(imgBlob4));
+                                        zip.file(filename[5])[0].async("arraybuffer").then(function (data5) {
+                                            imgBlob5 = new Blob([data5]);
+                                            app.answerZen = window.URL.createObjectURL(imgBlob5);
+                                            resolve();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch(function (error) {
+            app.fullscreenLoading = false;
+            app.$message.error('无法加载题目');
+        }).then(function () {
+            app.fullscreenLoading = false;
+        })
     }
     function insQuestion(q, data) {
         new Promise(function (resolve) {
             var source = data[q];
             var zipPath = 'ChoiceSource' + source['Src'] + source['Name'] + '.zip';
-            var randomChoice = [1, 2, 3, 4];
-            for (var i = 0; i < 4; i++) {
-                var t = parseInt(Math.random() * 10) % 4;
-                var tmp = randomChoice[i];
-                randomChoice[i] = randomChoice[t];
-                randomChoice[t] = tmp;
-            }
+            var randomChoice = getRandomChoice(4);
             app.correctChoice.push(randomChoice.indexOf(1) + 1);
-            var filename = [];
-            if (getUrlParam('subject') != 'XD') {
-                for (var i = 0; i <= 5; i++) filename[i] = RegExp(source['Name'] + '_' + i);
-            } else {
-                if (getUrlParam('id').indexOf('8') != -1) {
-                    filename[0] = RegExp(source['Name'] + '.jpg');
-                    for (var i = 1; i <= 4; i++) filename[i] = RegExp(source['Name'] + '_' + i + '.jpg');
-                    filename[5] = RegExp(source['Name'] + '.jpg');
-                } else {
-                    for (var i = 0; i <= 5; i++) filename[i] = RegExp(source['Name'].split('_')[1] + '_0' + i);
-                }
-            }
+            var filename = getFileName(source['Name']);
             JSZipUtils.getBinaryContent(zipPath, function (error, data) {
                 if (error) {
                     app.fullscreenLoading = false;
@@ -142,7 +220,6 @@
         }).catch(function (error) {
             app.fullscreenLoading = false;
             app.$message.error('无法加载题目');
-            return;
         }).then(function () {
             app.questions.push(data[q]);
             if (q < data.length - 1) insQuestion(q + 1, data);
@@ -158,9 +235,6 @@
             countdown: 100,
             countdownTime: getUrlParam('time') * 60,
             showCountdown: (getUrlParam('zen') != 1),
-            progress: 40,
-            showProgress: (getUrlParam('zen') == 1),
-            progressStatus: ''
         }
     });
     var app = new Vue({
@@ -168,7 +242,6 @@
         data: {
             fullscreenLoading: true,
             networkError: false,
-            eType: getUrlParam('type'),
             subject: getUrlParam('subject'),
             eId: getUrlParam('id'),
             zenMode: (getUrlParam('zen') == 1),
@@ -182,7 +255,15 @@
             correctChoice: [undefined],
             answer: [undefined],
             showAnswer: false,
-            choose: [undefined]
+            choose: [undefined],
+            questionTitleZen: '',
+            questionZen: '',
+            correctChoiceZen: '',
+            chooseZen: '',
+            choiceZen: [undefined, undefined, undefined, undefined, undefined],
+            answerZen: '',
+            zenTotal: 1,
+            zenCurrent: 1
         },
         computed: {},
         created: function () {
@@ -191,16 +272,24 @@
                 this.$message.error('期末考试不能与其他一起选择哦');
                 setTimeout(function () {
                     history.back();
-                }, 3000)
+                }, 3000);
                 return;
             }
             axios.get('getQuestion.php' + window.location.search, {}).then(function (response) {
                 if (response.status !== 200) {
-                    console.log(response);
+                    app.fullscreenLoading = false;
+                    app.$message.error('无法加载题目');
                     return;
                 }
-                app.choose = new Array(response.data.length + 1);
-                insQuestion(0, response.data);
+                if (app.zenMode) {
+                    app.questions = response.data;
+                    app.zenTotal = response.data.length - 1;
+                    app.zenCurrent = 0;
+                    insQuestionZen();
+                } else {
+                    app.choose = new Array(response.data.length + 1);
+                    insQuestion(0, response.data);
+                }
             }).catch(function (error) {
                 app.fullscreenLoading = false;
                 app.networkError = true;
@@ -210,6 +299,20 @@
             checkAnswer: function () {
                 this.showAnswer = true;
                 window.scrollTo(0, 0);
+            },
+            zenChange: function (currentPage) {
+                this.fullscreenLoading = true;
+                this.showAnswer = false;
+                this.chooseZen = '';
+                this.questionTitleZen = '';
+                this.questionZen = '';
+                this.choiceZen = [undefined, undefined, undefined, undefined, undefined];
+                this.answerZen = '';
+                this.zenCurrent = currentPage;
+                insQuestionZen();
+            },
+            zenNext: function () {
+                this.zenChange(this.zenCurrent + 1);
             },
             reloadPage: function () {
                 window.location.replace(window.location.href);

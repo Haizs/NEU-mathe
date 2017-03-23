@@ -168,3 +168,13 @@ footer {
 .submit {
     margin: 20px 11px;
 }
+
+.paginationFix {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.paginationFix .el-pagination__jump {
+    margin-top: 11px;
+    display: block;
+}

@@ -407,16 +407,19 @@
                     return;
                 }
                 if (this.radioType == this.types[0].name && !this.$refs.tree.getCheckedKeys(true).length) {
-                    this.$message.warning('还没有选择知识点呢');
+                    this.$message.warning('还没有选择练习考点呢');
+                    return;
+                }
+                if (this.radioType == this.types[1].name && !this.customTemplate && !this.customSource) {
+                    this.$message.warning('还没有设置测验范围呢');
                     return;
                 }
                 var url = 'paper.html';
-                url += '?type=' + ((this.radioType == this.types[0].name) ? '0' : '1');
-                url += '&subject=' + this.selectedSubject.id;
+                url += '?subject=' + this.selectedSubject.id;
                 if (this.radioType == this.types[0].name) {
-                    url += '&id=' + this.$refs.tree.getCheckedKeys(true).toString();
                     if (this.zenMode) url += '&zen=1';
                     else url += '&count=' + this.eCount + '&time=' + this.eTime;
+                    url += '&id=' + this.$refs.tree.getCheckedKeys(true).toString();
                 } else {
                     url += '&time=' + this.eTime;
                     url += '&template=' + this.customTemplate;

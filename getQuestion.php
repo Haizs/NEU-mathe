@@ -44,6 +44,8 @@ if (hasGET('source')) {
     echo(sqlQuery(trim(trim($sql), 'UNION'), $arr));
 } else if (hasGET('id')) {
     $ids = array_map('intval', explode(',', $_GET['id']));
-    $sql = 'SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE KnowledgeId IN(' . str_repeat(' ?,', count($ids) - 1) . ' ?) ORDER BY rand() LIMIT ' . (string)intval($_GET['count']);
+    $sql = 'SELECT * FROM ' . substr(trim($_GET['subject']), 0, 2) . '_ChoiceTable WHERE KnowledgeId IN(' . str_repeat(' ?,', count($ids) - 1) . ' ?)';
+    if (hasGET('zen') && trim($_GET['zen']) == '1') $sql .= ' ORDER BY KnowledgeId,Type';
+    else $sql .= ' ORDER BY rand() LIMIT ' . (string)intval($_GET['count']);
     echo(sqlQuery($sql, $ids));
 }
