@@ -171,10 +171,10 @@ footer {
 
 .paginationFix {
     text-align: center;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
 }
 
 .paginationFix .el-pagination__jump {
-    margin-top: 11px;
+    margin: 11px 0 0 0;
     display: block;
 }

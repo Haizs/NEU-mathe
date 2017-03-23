@@ -18,7 +18,7 @@
 <div id="container" class="wrap" v-loading.fullscreen.lock="fullscreenLoading">
     <el-alert style="margin-top: 42px;" v-if="networkError" title="网络错误" type="error" description="无法加载，请重试" show-icon
               :closable="false"></el-alert>
-    <template v-if="zenMode">
+    <template v-if="zenMode && !networkError">
         <el-pagination class="paginationFix" @current-change="zenChange" :current-page="zenCurrent"
                        layout="prev, pager, next, jumper" :page-size="1" :total="zenTotal">
         </el-pagination>
@@ -47,7 +47,7 @@
         <el-button v-if="showAnswer && zenCurrent>=zenTotal" class="submit" type="danger" @click="reloadPage"
                    v-text="'Retry'" :disabled="networkError"></el-button>
     </template>
-    <template v-if="!zenMode">
+    <template v-if="!zenMode && !networkError">
         <el-card class="question" v-for="q in questions.length" :key="q">
             <div slot="header">
                 <div class="question-title" v-text="'Question '+q"></div>
@@ -132,7 +132,7 @@
             var randomChoice = getRandomChoice(4);
             app.correctChoiceZen = randomChoice.indexOf(1) + 1;
             var filename = getFileName(source['Name']);
-            app.questionTitleZen = source['Name'];
+            app.questionTitleZen = source['Name'].split('_')[0] + '_' + source['Name'].split('_')[1];
             JSZipUtils.getBinaryContent(zipPath, function (error, data) {
                 if (error) {
                     app.fullscreenLoading = false;
