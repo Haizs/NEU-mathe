@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 4.6.6
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: 2017-03-30 15:08:36
+-- 服务器版本： 5.7.17-0ubuntu0.16.04.2
+-- PHP Version: 7.0.15-0ubuntu0.16.04.4
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -8492,7 +8501,7 @@ INSERT INTO `XD_Chapter` (`Id`, `Pid`, `Name`) VALUES
 --
 
 CREATE TABLE `XD_ChoiceTable` (
-  `id`          INT(4)       DEFAULT NULL,
+  `Id`          INT(4)       DEFAULT NULL,
   `KnowledgeId` INT(1)       DEFAULT NULL,
   `Type`        INT(1)       DEFAULT NULL,
   `Src`         VARCHAR(255) DEFAULT NULL,
@@ -8506,7 +8515,7 @@ CREATE TABLE `XD_ChoiceTable` (
 -- 转存表中的数据 `XD_ChoiceTable`
 --
 
-INSERT INTO `XD_ChoiceTable` (`id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count`) VALUES
+INSERT INTO `XD_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count`) VALUES
   (1, 1, 1, '/线性代数_XD/chapter1/Easy/', 'chapter1_1', 6),
   (2, 1, 1, '/线性代数_XD/chapter1/Easy/', 'chapter1_10', 6),
   (3, 1, 1, '/线性代数_XD/chapter1/Easy/', 'chapter1_11', 6),
@@ -9392,7 +9401,7 @@ INSERT INTO `XD_ChoiceTable` (`id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
   (883, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_101', 6),
   (884, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_102', 6),
   (885, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_104', 6);
-INSERT INTO `XD_ChoiceTable` (`id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count`) VALUES
+INSERT INTO `XD_ChoiceTable` (`Id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count`) VALUES
   (886, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_110', 6),
   (887, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_112', 6),
   (888, 6, 3, '/线性代数_XD/chapter6/Hard/', 'chapter6_113', 6),
@@ -9680,6 +9689,16 @@ INSERT INTO `XD_ChoiceTable` (`id`, `KnowledgeId`, `Type`, `Src`, `Name`, `Count
   (1170, 8, 2, '/线性代数_XD/FinalExam/ChapterTwo/', 'ChapterTwo_7', 5),
   (1171, 8, 2, '/线性代数_XD/FinalExam/ChapterTwo/', 'ChapterTwo_8', 5),
   (1172, 8, 2, '/线性代数_XD/FinalExam/ChapterTwo/', 'ChapterTwo_9', 5);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`email`);
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;

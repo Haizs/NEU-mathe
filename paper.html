@@ -55,7 +55,8 @@
             </div>
             <el-row>
                 <el-col :xs="24" :sm="24" v-for="i in 4" :key="i"
-                        :class="[{'choice-correct': showAnswer && correctChoice[q]==i},{'choice-wrong': showAnswer && correctChoice[q]!=i && (choose[q]==i || !choose[q])}]">
+                        :class="[{'choice-correct': showAnswer && correctChoice[q]==i},
+                                 {'choice-wrong': showAnswer && correctChoice[q]!=i && (choose[q]==i || !choose[q])}]">
                     <el-radio v-model="choose[q]" :label="i" :disabled="showAnswer">
                         <img :src="choice[i][q]">
                     </el-radio>
@@ -79,7 +80,7 @@
         </div>
     </div>
 </footer>
-<script src="js/vue.js"></script>
+<script src="js/vue.min.js"></script>
 <script src="js/element-ui.js"></script>
 <script src="js/axios.min.js"></script>
 <script src="js/jszip.min.js"></script>
@@ -127,7 +128,7 @@
     }
     function insQuestionZen() {
         new Promise(function (resolve) {
-            var source = app.questions[app.zenCurrent];
+            var source = app.questionsZen[app.zenCurrent];
             var zipPath = 'ChoiceSource' + source['Src'] + source['Name'] + '.zip';
             var randomChoice = getRandomChoice(4);
             app.correctChoiceZen = randomChoice.indexOf(1) + 1;
@@ -256,10 +257,11 @@
             answer: [undefined],
             showAnswer: false,
             choose: [undefined],
+            questionsZen: [undefined],
             questionTitleZen: '',
             questionZen: '',
-            correctChoiceZen: '',
-            chooseZen: '',
+            correctChoiceZen: 0,
+            chooseZen: 0,
             choiceZen: [undefined, undefined, undefined, undefined, undefined],
             answerZen: '',
             zenTotal: 1,
@@ -282,9 +284,9 @@
                     return;
                 }
                 if (app.zenMode) {
-                    app.questions = response.data;
-                    app.zenTotal = response.data.length - 1;
-                    app.zenCurrent = 0;
+                    app.questionsZen = app.questionsZen.concat(response.data);
+                    app.zenTotal = response.data.length;
+                    app.zenCurrent = 1;
                     insQuestionZen();
                 } else {
                     app.choose = new Array(response.data.length + 1);
@@ -303,16 +305,17 @@
             zenChange: function (currentPage) {
                 this.fullscreenLoading = true;
                 this.showAnswer = false;
-                this.chooseZen = '';
+                this.chooseZen = 0;
                 this.questionTitleZen = '';
                 this.questionZen = '';
                 this.choiceZen = [undefined, undefined, undefined, undefined, undefined];
+                this.correctChoiceZen = 0;
                 this.answerZen = '';
                 this.zenCurrent = currentPage;
                 insQuestionZen();
             },
             zenNext: function () {
-                this.zenChange(this.zenCurrent + 1);
+                this.zenCurrent += 1;
             },
             reloadPage: function () {
                 window.location.replace(window.location.href);
