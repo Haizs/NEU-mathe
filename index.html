@@ -33,11 +33,11 @@
                custom-class="login-panel">
         <el-form v-if="isRegister" ref="registerForm" :model="registerForm" :rules="registerFormCheck"
                  label-width="88px" v-loading="loadingRegister">
-            <el-form-item label="邮箱" prop="email" key="register-email">
-                <el-input v-model="registerForm.email"></el-input>
-            </el-form-item>
             <el-form-item label="昵称" prop="nickname" key="register-nickname">
                 <el-input v-model="registerForm.nickname"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email" key="register-email">
+                <el-input v-model="registerForm.email"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password" key="register-password">
                 <el-input v-model="registerForm.password" type="password"></el-input>
