@@ -4,7 +4,7 @@
 
 Based on [Vue.js](https://github.com/vuejs/vue) and [element](https://github.com/ElemeFE/element).
 
-Using PHP with MySQL and Redis.
+Using PHP with MySQL.
 
 Build while learning.
 

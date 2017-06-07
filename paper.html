@@ -297,6 +297,26 @@
                 app.networkError = true;
             })
         },
+        mounted: function () {
+            if (this.zenMode) {
+                document.addEventListener('keydown', function (e) {
+                    if (!app.fullscreenLoading) {
+                        if (e.keyCode == 37 && app.zenCurrent > 1) app.zenCurrent -= 1;
+                        if (e.keyCode == 38 && app.chooseZen > 0 && !app.showAnswer) app.chooseZen -= 1;
+                        if (e.keyCode == 39 && app.zenCurrent < app.zenTotal) app.zenCurrent += 1;
+                        if (e.keyCode == 40 && app.chooseZen < 4 && !app.showAnswer) app.chooseZen += 1;
+                        if (e.keyCode >= 49 && e.keyCode <= 52 && !app.showAnswer) app.chooseZen = e.keyCode - 48;
+                        if (e.keyCode == 13) {
+                            if (!app.showAnswer) app.checkAnswer();
+                            else {
+                                if (app.zenCurrent < app.zenTotal) app.zenNext();
+                                else app.reloadPage();
+                            }
+                        }
+                    }
+                });
+            }
+        },
         methods: {
             checkAnswer: function () {
                 this.showAnswer = true;
