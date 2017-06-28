@@ -2,7 +2,7 @@ import os.path
 import csv
 import re
 
-headers = ['id', 'KnowledgeId', 'Type', 'Src', 'Name', 'Count']
+headers = ['Id', 'KnowledgeId', 'Type', 'Src', 'Name', 'Count']
 
 
 def doSubject(subject):
